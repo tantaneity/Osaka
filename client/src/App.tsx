@@ -1,10 +1,10 @@
-import { StickyNavbar } from './components/admin/dashboard/Navigation';
+import { ComplexNavbar } from './components/nav/Navigation';
 
 function App() {
 
   return (
     <>
-      <StickyNavbar/>
+      <ComplexNavbar/>
     </>
   )
 }
