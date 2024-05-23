@@ -54,7 +54,7 @@ export class PgProductRepository implements IProductRepository {
 
     async getAllProducts(): Promise<Product[]> {
         const products = await this.productRepository.find({
-            relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product']
+            relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product']
         })
 
 

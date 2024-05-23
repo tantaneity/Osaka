@@ -4,7 +4,7 @@ import { Product } from "@/types/products/Product"
 import { api } from "@/api"
 
 class ProductService {
-    private ROUTE_PREFIX = '/drinks'
+    private ROUTE_PREFIX = 'api/drinks'
 
     async getProducts(): Promise<Product[]> {
         const products = (await api.get<Product[]>(this.ROUTE_PREFIX)).data

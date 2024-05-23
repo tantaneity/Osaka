@@ -40,7 +40,7 @@ export class ProductEntity {
     @OneToMany(() => CartItemEntity, cartItem => cartItem.product)
     cartItems: CartItemEntity[];
 
-    @OneToMany(() => OrderItemEntity, orderItem => orderItem.product) // Добавлена ассоциация с OrderItemEntity
+    @OneToMany(() => OrderItemEntity, orderItem => orderItem.product)
     orderItems: OrderItemEntity[];
 
     @CreateDateColumn({ type: 'timestamp', nullable: true })

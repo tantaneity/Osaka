@@ -13,6 +13,7 @@ import AdminRouter from './src/routes/AdminRouter'
 import CartRouter from './src/routes/CartRouter'
 import SellsRouter from './src/routes/SellsRouter'
 import OrderRouter from './src/routes/OrderRouter'
+import PageRouter from './src/routes/PageRouter'
 const app = express()
 const PORT = process.env.PORT || 5000
 
@@ -29,6 +30,7 @@ app.use('/api/sells', SellsRouter)
 app.use('/api/reviews', ReviewRouter)
 app.use('/api/cart', CartRouter)
 app.use('/api/orders', OrderRouter)
+app.use('/api/pages', PageRouter)
 app.use(errorMiddleware)
 
 app.get('/', (req, res) => {

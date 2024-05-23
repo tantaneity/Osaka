@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+
 import {
   Navbar,
-  MobileNav,
   Typography,
   Button,
   Menu,
@@ -11,6 +12,7 @@ import {
   Avatar,
   Card,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import {
   CubeTransparentIcon,
@@ -20,12 +22,13 @@ import {
   ChevronDownIcon,
   Cog6ToothIcon,
   InboxArrowDownIcon,
-  LifebuoyIcon,
   PowerIcon,
-  RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
- 
+import useUserStore from "@/store/UserStore";
+import { LoginDialog } from "../dialog/LoginDialog";
+import { useGetPages } from "@/hooks/usePages";
+
 // profile menu component
 const profileMenuItems = [
   {
@@ -41,20 +44,16 @@ const profileMenuItems = [
     icon: InboxArrowDownIcon,
   },
   {
-    label: "Help",
-    icon: LifebuoyIcon,
-  },
-  {
     label: "Sign Out",
     icon: PowerIcon,
   },
 ];
- 
+
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
+
   const closeMenu = () => setIsMenuOpen(false);
- 
+
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -66,7 +65,7 @@ function ProfileMenu() {
           <Avatar
             variant="circular"
             size="sm"
-            alt="tania andrew"
+            alt="avatar"
             className="border border-gray-900 p-0.5"
             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
           />
@@ -110,30 +109,15 @@ function ProfileMenu() {
     </Menu>
   );
 }
- 
-// nav list menu
-const navListMenuItems = [
-  {
-    title: "@material-tailwind/html",
-    description:
-      "Learn how to use @material-tailwind/html, packed with rich components and widgets.",
-  },
-  {
-    title: "@material-tailwind/react",
-    description:
-      "Learn how to use @material-tailwind/react, packed with rich components for React.",
-  },
-  {
-    title: "Material Tailwind PRO",
-    description:
-      "A complete set of UI Elements for building faster websites in less time.",
-  },
-];
- 
+
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
-  const renderItems = navListMenuItems.map(({ title, description }) => (
+
+  const { data: pages, isLoading, isError } = useGetPages();
+
+  const closeMenu = () => setIsMenuOpen(false);
+  
+  const renderItems = pages?.map(({ title, description }) => (
     <a href="#" key={title}>
       <MenuItem>
         <Typography variant="h6" color="blue-gray" className="mb-1">
@@ -145,12 +129,17 @@ function NavListMenu() {
       </MenuItem>
     </a>
   ));
- 
+
   return (
     <React.Fragment>
       <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
         <MenuHandler>
-          <Typography as="a" href="#" variant="small" className="font-normal">
+          <Typography
+            as="a"
+            href="#"
+            variant="small"
+            className="font-normal"
+          >
             <MenuItem className="hidden items-center gap-2 font-medium text-blue-gray-900 lg:flex lg:rounded-full">
               <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
               Pages{" "}
@@ -165,12 +154,16 @@ function NavListMenu() {
         </MenuHandler>
         <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid">
           <Card
-            color="blue"
-            shadow={false}
+            color="transparent"
+            shadow={true}
             variant="gradient"
             className="col-span-3 grid h-full w-full place-items-center rounded-md"
           >
-            <RocketLaunchIcon strokeWidth={1} className="h-28 w-28" />
+            <img
+              alt="osaka-with-cola"
+              className="h-60 w-60"
+              src="https://i.pinimg.com/564x/e0/5a/90/e05a90a5ab1b10585ef9a1f6912d4e30.jpg"
+            />
           </Card>
           <ul className="col-span-4 flex w-full flex-col gap-1">
             {renderItems}
@@ -187,8 +180,6 @@ function NavListMenu() {
     </React.Fragment>
   );
 }
- 
-// nav list component
 const navListItems = [
   {
     label: "Account",
@@ -203,42 +194,68 @@ const navListItems = [
     icon: CodeBracketSquareIcon,
   },
 ];
- 
+
 function NavList() {
+  const isAuth = useUserStore((state) => state.isAuth);
+  const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isAuth) {
+      setOpenLoginDialog(true);
+    }
+  }, [isAuth]);
+
+  const handleOpenLoginDialog = () => {
+    setOpenLoginDialog(!openLoginDialog);
+  };
+
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
-      {navListItems.map(({ label, icon }, key) => (
-        <Typography
-          key={label}
-          as="a"
-          href="#"
-          variant="small"
-          color="gray"
-          className="font-medium text-blue-gray-500"
-        >
-          <MenuItem className="flex items-center gap-2 lg:rounded-full">
-            {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
-            <span className="text-gray-900"> {label}</span>
-          </MenuItem>
-        </Typography>
-      ))}
+      {!isAuth && (
+        <Button size="sm" variant="text" onClick={handleOpenLoginDialog}>
+          Log In
+        </Button>
+      )}
+      <LoginDialog open={openLoginDialog} handleOpen={handleOpenLoginDialog} />
+      {isAuth && (
+        <>
+          {navListItems.map(({ label, icon }) => (
+            <Typography
+              key={label}
+              as="a"
+              href="#"
+              variant="small"
+              color="gray"
+              className="font-medium text-blue-gray-500"
+            >
+              <MenuItem className="flex items-center gap-2 lg:rounded-full">
+                {React.createElement(icon, {
+                  className: "h-[18px] w-[18px]",
+                })}{" "}
+                <span className="text-gray-900"> {label}</span>
+              </MenuItem>
+            </Typography>
+          ))}
+          <ProfileMenu />
+        </>
+      )}
     </ul>
   );
 }
- 
-export function ComplexNavbar() {
+
+export function NavBar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
- 
+
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
- 
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
-      () => window.innerWidth >= 960 && setIsNavOpen(false),
+      () => window.innerWidth >= 960 && setIsNavOpen(false)
     );
   }, []);
- 
+
   return (
     <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
@@ -247,7 +264,7 @@ export function ComplexNavbar() {
           href="#"
           className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
         >
-          Material Tailwind
+          Osaka
         </Typography>
         <div className="hidden lg:block">
           <NavList />
@@ -261,15 +278,10 @@ export function ComplexNavbar() {
         >
           <Bars2Icon className="h-6 w-6" />
         </IconButton>
- 
-        <Button size="sm" variant="text">
-          <span>Log In</span>
-        </Button>
-        <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
+      <Collapse open={isNavOpen} className="overflow-scroll">
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
   );
 }

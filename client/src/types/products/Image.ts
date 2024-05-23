@@ -3,6 +3,9 @@ import { Product } from "./Product"
 export interface Image {
     id: string
     product: Product
-    data: Buffer
+    data: {
+        type: string
+        data: ArrayBuffer
+    }
     createdAt: Date
 }
