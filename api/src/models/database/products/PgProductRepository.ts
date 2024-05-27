@@ -17,7 +17,7 @@ export class PgProductRepository implements IProductRepository {
     }
 
     async getProductById(productId: string): Promise<Product | null> {
-        const product = await this.productRepository.findOne({ where : { id: productId }, relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product']})
+        const product = await this.productRepository.findOne({ where : { id: productId }, relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product']})
         return product ? ProductMapper.fromProductEntityToProduct(product) : null
     }
 

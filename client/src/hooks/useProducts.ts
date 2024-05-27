@@ -8,7 +8,11 @@ export const useGetProducts = () =>  useQuery({
     
     queryFn: () => ProductService.getProducts()
 })
-
+export const useGetProductById = (productId: string | undefined | null) => useQuery({
+    queryKey: ['product-by-id', productId],
+    queryFn: () => ProductService.getProductById(productId || ''),
+    enabled: !!productId,
+})
 export const useCreateProduct = (inputProduct: ProductCreate) => {
     const queryClient = useQueryClient()
     return useMutation({

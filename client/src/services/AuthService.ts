@@ -1,9 +1,9 @@
 import { api } from "@/api"
 import { UserCreate } from "@/types/users/UserCreate"
 import { AuthResponse } from "@/types/users/auth/AuthResponse"
-import { UserShort } from "@/types/users/UserShort"
+import { UserLogin } from "@/types/users/auth/UserLogin"
 class AuthService {
-    private ROUTE_PREFIX = '/users'
+    private ROUTE_PREFIX = 'api/users'
 
     async registrate(user: UserCreate) {
         const response = await api.post<AuthResponse>(`${this.ROUTE_PREFIX}/registration`, { 
@@ -11,7 +11,7 @@ class AuthService {
         })
         return response.data
     }
-    async login(user: UserShort) {
+    async login(user: UserLogin) {
         const response = await api.post<AuthResponse>(`${this.ROUTE_PREFIX}/login`, { ...user })
         return response.data
     }

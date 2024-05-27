@@ -19,9 +19,11 @@ const PORT = process.env.PORT || 5000
 
 app.use(express.json())
 app.use(cors({
+    preflightContinue: true,
     credentials: true,
     origin: process.env.CLIENT_URL
 }))
+
 app.use('/api/users', UserRouter)
 app.use('/api/admin', AdminRouter)
 app.use('/api/drinks', ProductRouter)
@@ -33,9 +35,6 @@ app.use('/api/orders', OrderRouter)
 app.use('/api/pages', PageRouter)
 app.use(errorMiddleware)
 
-app.get('/', (req, res) => {
-    res.send('Meow').json()
-})
 
 
 

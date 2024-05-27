@@ -15,19 +15,22 @@ import {
   Collapse,
 } from "@material-tailwind/react";
 import {
-  CubeTransparentIcon,
   UserCircleIcon,
-  CodeBracketSquareIcon,
   Square3Stack3DIcon,
   ChevronDownIcon,
   Cog6ToothIcon,
   InboxArrowDownIcon,
   PowerIcon,
   Bars2Icon,
+  HeartIcon,
+  NewspaperIcon,
+  ShoppingCartIcon
 } from "@heroicons/react/24/solid";
 import useUserStore from "@/store/UserStore";
 import { LoginDialog } from "../dialog/LoginDialog";
 import { useGetPages } from "@/hooks/usePages";
+import { CartDrawlerButton } from "../drawler/CartDrawler";
+import { createPortal } from "react-dom";
 
 // profile menu component
 const profileMenuItems = [
@@ -49,74 +52,15 @@ const profileMenuItems = [
   },
 ];
 
-function ProfileMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const closeMenu = () => setIsMenuOpen(false);
-
-  return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-      <MenuHandler>
-        <Button
-          variant="text"
-          color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
-        >
-          <Avatar
-            variant="circular"
-            size="sm"
-            alt="avatar"
-            className="border border-gray-900 p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-          />
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${
-              isMenuOpen ? "rotate-180" : ""
-            }`}
-          />
-        </Button>
-      </MenuHandler>
-      <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
-          const isLastItem = key === profileMenuItems.length - 1;
-          return (
-            <MenuItem
-              key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
-              >
-                {label}
-              </Typography>
-            </MenuItem>
-          );
-        })}
-      </MenuList>
-    </Menu>
-  );
-}
-
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
   const { data: pages, isLoading, isError } = useGetPages();
-
+  const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
+  const isAuth = useUserStore((state) => state.isAuth);
   const closeMenu = () => setIsMenuOpen(false);
-  
+  const handleOpenLoginDialog = () => {
+    setOpenLoginDialog(!openLoginDialog);
+  };
   const renderItems = pages?.map(({ title, description }) => (
     <a href="#" key={title}>
       <MenuItem>
@@ -132,6 +76,7 @@ function NavListMenu() {
 
   return (
     <React.Fragment>
+      <LoginDialog open={openLoginDialog} handleOpen={handleOpenLoginDialog} />
       <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
         <MenuHandler>
           <Typography
@@ -177,6 +122,17 @@ function NavListMenu() {
       <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
         {renderItems}
       </ul>
+      {!isAuth &&
+        <Button 
+          variant="text"
+          color="blue-gray"
+          className="flex items-center gap-2 rounded"
+          onClick={handleOpenLoginDialog}
+        >
+          Login
+        </Button>
+      }
+      
     </React.Fragment>
   );
 }
@@ -186,38 +142,48 @@ const navListItems = [
     icon: UserCircleIcon,
   },
   {
-    label: "Blocks",
-    icon: CubeTransparentIcon,
+    label: "Wish",
+    icon: HeartIcon,
   },
   {
-    label: "Docs",
-    icon: CodeBracketSquareIcon,
+    label: "News",
+    icon: NewspaperIcon,
   },
 ];
 
 function NavList() {
   const isAuth = useUserStore((state) => state.isAuth);
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
+  const [loading] = useState(true);
 
-  useEffect(() => {
-    if (!isAuth) {
-      setOpenLoginDialog(true);
-    }
-  }, [isAuth]);
+  console.log(isAuth)
 
   const handleOpenLoginDialog = () => {
     setOpenLoginDialog(!openLoginDialog);
   };
-
+  
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
-      {!isAuth && (
-        <Button size="sm" variant="text" onClick={handleOpenLoginDialog}>
-          Log In
-        </Button>
+      {loading ? (
+        <> </>
+      ) : (
+        <>
+          {!isAuth && (
+              <>
+                <Button size="sm" variant="text" onClick={handleOpenLoginDialog}>
+                  Log In
+                </Button>
+                {openLoginDialog && (
+                  <LoginDialog open={openLoginDialog} handleOpen={handleOpenLoginDialog} />
+                )}
+              </>
+            )}
+
+        </>
       )}
-      <LoginDialog open={openLoginDialog} handleOpen={handleOpenLoginDialog} />
+
+      
       {isAuth && (
         <>
           {navListItems.map(({ label, icon }) => (
@@ -237,7 +203,6 @@ function NavList() {
               </MenuItem>
             </Typography>
           ))}
-          <ProfileMenu />
         </>
       )}
     </ul>
@@ -261,7 +226,7 @@ export function NavBar() {
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
-          href="#"
+          href="/"
           className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
         >
           Osaka

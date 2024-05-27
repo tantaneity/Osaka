@@ -29,6 +29,32 @@ export class UserController {
             next(error)
         }
     }
+
+    async getUserByUsername(req: Request, res: Response, next: NextFunction) {
+        try {
+            const username = req.params.username as string
+            const user = await this.userService.getUserByUsername(username)
+            if (!user) {
+                return next(ApiError.badRequest('User not found'))
+            }
+            res.json(user)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getUserByEmail(req: Request, res: Response, next: NextFunction) {
+        try {
+            const email = req.params.email as string
+            const user = await this.userService.getUserByEmail(email)
+            if (!user) {
+                return next(ApiError.badRequest('User not found'))
+            }
+            res.json(user)
+        } catch (error) {
+            next(error)
+        }
+    }
     async getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const users = await this.userService.getAllUsers()

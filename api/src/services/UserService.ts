@@ -18,11 +18,26 @@ export class UserService {
     async getUserById(userId: string): Promise<UserInfoDto | null> {
         const user = await this.userRepository.getUserById(userId)
         if (!user) {
-            throw ApiError.unauthorized("User not found")
+            throw ApiError.badRequest("User not found")
         }
         return UserMapper.toUserInfoDto(user)
     }
 
+    async getUserByEmail(email: string): Promise<UserInfoDto | null> {
+        const user = await this.userRepository.getUserByEmail(email)
+        if (!user) {
+            throw ApiError.badRequest("User not found")
+        }
+        return UserMapper.toUserInfoDto(user)
+    }
+
+    async getUserByUsername(username: string): Promise<UserInfoDto | null> {
+        const user = await this.userRepository.getUserByUsername(username)
+        if (!user) {
+            throw ApiError.badRequest("User not found")
+        }
+        return UserMapper.toUserInfoDto(user)
+    }
     async refresh(refreshToken: string | undefined) {
         if (!refreshToken) {
             throw ApiError.unauthorized("User is unauthorized")

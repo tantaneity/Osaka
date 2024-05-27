@@ -21,6 +21,17 @@ UserRouter.get('/one/:id', authMiddleware, async (req: Request, res: Response, n
     
     await userController.getUserById(req, res, next)
 })
+
+UserRouter.get('/email/:email', async (req: Request, res: Response, next: NextFunction) => {
+    
+    await userController.getUserByEmail(req, res, next)
+})
+
+UserRouter.get('/username/:username', async (req: Request, res: Response, next: NextFunction) => {
+    
+    await userController.getUserByUsername(req, res, next)
+})
+
 UserRouter.post('/login',
 async (req: Request, res: Response, next: NextFunction) => {
     await authController.login(req, res, next)

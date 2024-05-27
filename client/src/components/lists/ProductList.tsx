@@ -1,6 +1,6 @@
 import { useGetProducts } from '@/hooks/useProducts';
 import ProductCard from '../card/Card';
-import { CardPlacehoderSkeleton } from '../card/CardSkeleton';
+import { CardPlacehoderSkeleton } from '../skeleton/CardSkeleton';
 
 function ProductList() {
     const {data, isLoading, isError } = useGetProducts();

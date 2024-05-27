@@ -1,7 +1,8 @@
-import { UserCreate } from "@/types/users/UserCreate";
 import { UserShort } from "@/types/users/UserShort";
 import { create } from "zustand";
 import AuthService from "@/services/AuthService";
+import { UserReg } from "@/types/users/auth/UserReg";
+import { UserLogin } from "@/types/users/auth/UserLogin";
 
 type UserState = {
     user: UserShort | null;
@@ -9,8 +10,8 @@ type UserState = {
     isLoading: boolean;
     setUser: (user: UserShort) => void;
     setIsAuth: (value: boolean) => void;
-    registrate: (data: UserCreate) => void;
-    login: (data: UserShort) => void;
+    registrate: (data: UserReg) => void;
+    login: (data: UserLogin) => void;
     logout: () => void;
     checkAuth: () => void;
 }
@@ -42,9 +43,13 @@ const useUserStore = create<UserState>((set) => ({
             const response = await AuthService.login(data)
 
             localStorage.setItem("token", response.tokens.accessToken)
+            
             set({ user: response.user, isAuth: true })
-        } catch(e) {
+            
+        } catch(e: any) {
             console.log(e)
+            
+            
         } finally {
             set({ isLoading: false })
         }
