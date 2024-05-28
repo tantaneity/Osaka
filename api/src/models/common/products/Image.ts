@@ -2,7 +2,7 @@ import Product from "./Product"
 
 export default interface Image {
     id: string
-    product: Product
+    product: Product | {id: string}
     data: Buffer
     createdAt: Date
 }

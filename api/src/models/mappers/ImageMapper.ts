@@ -7,7 +7,7 @@ export class ImageMapper {
     static fromImageEntityToImage(entity: ImageEntity): Image {
         return {
             id: entity.id,
-            product: ProductMapper.fromProductEntityToProduct(entity.product),
+            product: {id: entity.product.id},
             data: entity.data,
             createdAt: entity.createdAt
         }

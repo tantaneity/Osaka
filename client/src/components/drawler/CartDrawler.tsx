@@ -1,16 +1,31 @@
 import React from 'react';
 import { Drawer, Typography } from "@material-tailwind/react";
+import useUserStore from '@/store/UserStore';
+import { useCreateCart, useGetCartItemsByCartId, useGetCartsByUserId } from '@/hooks/useCart';
+import { Cart } from '@/types/shop/cart/Cart';
+import CartList from '../lists/CartList';
 
-interface CartDrawerProps {
+interface CartDrawlerProps {
     open: boolean;
     onClose: () => void;
 }
 
-const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
+const CartDrawler: React.FC<CartDrawlerProps> = ({ open, onClose }) => {
+    const { user } = useUserStore();
+    const { data: cartData, error: cartError, isLoading: cartLoading } = useGetCartsByUserId(user?.id);
+    const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
+    
     return (
-        <Drawer open={open} onClose={onClose} className="fixed right-0 top-0 w-full max-w-sm h-full bg-white shadow-lg">
-            <div className="mb-2 flex items-center justify-between p-4 border-b">
-                <Typography variant="h5" color="blue-gray">
+        <Drawer 
+            open={open} 
+            onClose={onClose} 
+            className="p-4 drop-shadow-2xl"
+            placement="left"
+            size={500}
+            overlay={false}
+        >
+            <div className="mb-6 flex items-center justify-between">
+                <Typography variant="h5" color="blue-gray" className='max-w-md mx-auto p-4'>
                     Shopping Cart
                 </Typography>
                 <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -19,12 +34,12 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                     </svg>
                 </button>
             </div>
-            {/*TODO: cart content here */}
-            <div className="p-4">
-                <Typography>This is your cart. Add items here.</Typography>
+            
+            <div className="flex justify-center">
+                {cartId && <CartList cartId={cartId}/>}
             </div>
         </Drawer>
     );
 };
 
-export default CartDrawer;
+export default CartDrawler;

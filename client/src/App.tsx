@@ -39,6 +39,7 @@ function App() {
     <>
      <QueryClientProvider client={queryClient}>
       <div className="bg-blue-gray-100">
+        
         <NavBar/>
           <RouterProvider router={browserRouter} />
         <Footer/>

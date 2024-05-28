@@ -21,22 +21,32 @@ import useUserStore from '@/store/UserStore';
 import { ReviewDialog } from '@/components/dialog/ReviewDialog';
 import { LoginDialog } from '@/components/dialog/LoginDialog';
 import CartButton from '@/components/button/CartButton';
-import CartDrawer from '@/components/drawler/CartDrawler';
+import CartDrawler from '@/components/drawler/CartDrawler';
+import { useCreateCartItem, useGetCartsByUserId } from '@/hooks/useCart';
 
 const ProductPage: React.FC = () => {
     const { productId } = useParams<{ productId: string }>();
     const { data: productData, error: productError, isLoading: productLoading } = useGetProductById(productId);
     const { data: reviewsData, error: reviewsError, isLoading: reviewsLoading } = useGetReviewsByProductId(productId);
     const createReviewMutation = useCreateReview();
-
+   
     const { isAuth, user, checkAuth } = useUserStore();
     const [openReviewForm, setOpenReviewForm] = useState(false);
     const [openReviews, setOpenReviews] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const { mutate: addToCart } = useCreateCartItem();
+    const { data: cartData, error: cartError, isLoading: cartLoading } = useGetCartsByUserId(user?.id);
+    const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
+    const handleAddToCart = () => {
+        if (productData && cartId) {
+          addToCart({ product: {id: productData.id}, quantity: 1, cart: { id: cartId} });
+        }
+      };
 
     const handleCartButtonClick = () => {
         setDrawerOpen(true);
     };
+    
 
     const closeDrawer = () => {
         setDrawerOpen(false);
@@ -86,7 +96,7 @@ const ProductPage: React.FC = () => {
         <section className="py-8 px-4 sm:px-8">
             <div className="mx-auto container grid place-items-center gap-8 grid-cols-1 lg:grid-cols-2 ">
                 <CartButton onClick={handleCartButtonClick} />
-                <CartDrawer open={drawerOpen} onClose={closeDrawer} />
+                <CartDrawler open={drawerOpen} onClose={closeDrawer} />
                 <Card className="w-full max-w-md lg:max-w-xl min-h-[32rem] flex flex-col justify-between" variant="gradient">
                     <Carousel
                         className="rounded-xl h-96 w-full relative flex-auto"
@@ -123,6 +133,7 @@ const ProductPage: React.FC = () => {
                                 </div>
                             );
                         })}
+                        
                     </Carousel>
                 </Card>
 
@@ -149,7 +160,7 @@ const ProductPage: React.FC = () => {
                         </Typography>
                     </div>
                     <div className="my-4 flex flex-col w-full gap-3 lg:flex-row">
-                        <Button color="gray" className="w-full lg:w-52">
+                        <Button color="gray" className="w-full lg:w-52" onClick={handleAddToCart}>
                             Add to Cart
                         </Button>
                         <IconButton color="gray" variant="text" className="shrink-0">

@@ -11,6 +11,10 @@ class CartService {
         return cart;
     }
 
+    async getCartsByUserId(userId: string): Promise<Cart[]> {
+        const cart = (await api.get<Cart[]>(`${this.ROUTE_PREFIX}/user/${userId}`)).data;
+        return cart;
+    }
     async getAllCarts(): Promise<Cart[]> {
         const carts = (await api.get<Cart[]>(this.ROUTE_PREFIX)).data;
         return carts;
@@ -39,6 +43,11 @@ class CartService {
         const cartItem = (await api.get<CartItem>(`${this.ROUTE_PREFIX}/items/${cartItemId}`)).data;
         return cartItem;
     }
+    
+    async getCartItemsByCartId(cartId: string): Promise<CartItem[]> {
+        const cartItems = (await api.get<CartItem[]>(`${this.ROUTE_PREFIX}/user/items/${cartId}`)).data;
+        return cartItems;
+    }
 
     async createCartItem(cartItemData: Partial<CartItem>): Promise<CartItem> {
         const cartItem = (await api.post<CartItem>(`${this.ROUTE_PREFIX}/items`, cartItemData)).data;
@@ -53,6 +62,7 @@ class CartService {
     async deleteCartItem(cartItemId: string): Promise<void> {
         await api.delete(`${this.ROUTE_PREFIX}/items/${cartItemId}`);
     }
+    
 }
 
 export default new CartService();

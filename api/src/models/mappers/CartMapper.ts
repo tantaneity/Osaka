@@ -9,7 +9,7 @@ export class CartMapper {
     static fromCartEntityToCart(cartEntity: CartEntity): Cart {
         return {
             id: cartEntity.id,
-            user: UserMapper.fromUserEntityToUser(cartEntity.user),
+            user: {id: cartEntity.user.id},
             items: cartEntity.items.map(item => this.fromCartItemEntityToCartItem(item)),
             dateCreated: cartEntity.dateCreated,
             dateModified: cartEntity.dateModified
@@ -19,7 +19,7 @@ export class CartMapper {
     static fromCartItemEntityToCartItem(cartItemEntity: CartItemEntity): CartItem {
         return {
             id: cartItemEntity.id,
-            cart: this.fromCartEntityToCart(cartItemEntity.cart),
+            cart:{id: cartItemEntity.cart.id},
             product: ProductMapper.fromProductEntityToProduct(cartItemEntity.product),
             quantity: cartItemEntity.quantity
         }
