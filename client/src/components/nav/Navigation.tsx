@@ -24,33 +24,11 @@ import {
   Bars2Icon,
   HeartIcon,
   NewspaperIcon,
-  ShoppingCartIcon
 } from "@heroicons/react/24/solid";
 import useUserStore from "@/store/UserStore";
 import { LoginDialog } from "../dialog/LoginDialog";
 import { useGetPages } from "@/hooks/usePages";
-import { CartDrawlerButton } from "../drawler/CartDrawler";
-import { createPortal } from "react-dom";
 
-// profile menu component
-const profileMenuItems = [
-  {
-    label: "My Profile",
-    icon: UserCircleIcon,
-  },
-  {
-    label: "Edit Profile",
-    icon: Cog6ToothIcon,
-  },
-  {
-    label: "Inbox",
-    icon: InboxArrowDownIcon,
-  },
-  {
-    label: "Sign Out",
-    icon: PowerIcon,
-  },
-];
 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);

@@ -29,3 +29,15 @@ export const useDeleteReview = () => {
         }
     });
 };
+
+
+export const useFetchAdditionalReviewsByProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationKey: ['fetch-additional-reviews'],
+        mutationFn: ({ productId, skip, take }: { productId: string, skip: number, take: number }) => ReviewService.fetchAdditionalReviewsByProduct(productId, skip, take),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['reviews-by-product-id'] });
+        }
+    });
+};

@@ -10,10 +10,16 @@ import {
 } from "@material-tailwind/react";
 import CartButton from '@/components/button/CartButton';
 import CartDrawler from '@/components/drawler/CartDrawler';
+import useUserStore from '@/store/UserStore';
+import { LoginDialog } from '@/components/dialog/LoginDialog';
 
 const HomePage: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-
+    const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
+    const handleOpenLoginDialog = () => {
+    setOpenLoginDialog(!openLoginDialog);
+    };
+    const { isAuth } = useUserStore()
     const handleCartButtonClick = () => {
         setDrawerOpen(true);
     };
@@ -27,7 +33,8 @@ const HomePage: React.FC = () => {
         
             
             <div className="flex flex-col w-full">
-                <CartDrawler open={drawerOpen} onClose={closeDrawer} />
+                {isAuth && <CartDrawler open={drawerOpen} onClose={closeDrawer} />}
+                {!isAuth && <LoginDialog open={openLoginDialog} handleOpen={handleOpenLoginDialog}/>}
                 <div className="bg-blue-gray-100 border-b-2 p-4 w-full flex justify-center">
                     
                     <div className="flex flex-col md:flex-row justify-center items-start w-full max-w-screen-xl">
@@ -71,7 +78,7 @@ const HomePage: React.FC = () => {
                 </div>
 
             </div>
-            <CartButton onClick={handleCartButtonClick} />
+            <CartButton onClick={isAuth ? handleCartButtonClick : handleOpenLoginDialog} />
         </>
     );
 };

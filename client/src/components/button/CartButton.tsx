@@ -11,6 +11,8 @@ interface CartButtonProps {
 const CartButton: React.FC<CartButtonProps> = ({ onClick }) => {
     const { user } = useUserStore();
     const { data: cartData } = useGetCartsByUserId(user?.id);
+
+    console.log(cartData)
     const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
     const { data: cartItems } = useGetCartItemsByCartId(cartId);
     const totalQuantity = cartItems?.reduce((total, item) => total + item.quantity, 0)

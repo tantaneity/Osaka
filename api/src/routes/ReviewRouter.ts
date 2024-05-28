@@ -32,4 +32,8 @@ ReviewRouter.get('/user/:userId', async (req: Request, res: Response, next: Next
     await reviewController.getReviewsByUser(req, res, next)
 })
 
+ReviewRouter.get('/product/:productId/additional', async (req: Request, res: Response, next: NextFunction) => {
+    await reviewController.fetchAdditionalReviewsByProduct(req, res, next)
+})
+
 export default ReviewRouter

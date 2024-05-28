@@ -38,7 +38,9 @@ export class ReviewService {
     async getReviewsByProduct(productId: string): Promise<Review[]> {
         return await this.reviewRepository.getReviewsByProduct(productId)
     }
-
+    async fetchAdditionalReviewsByProduct(productId: string, skip: number, take: number): Promise<Review[]> {
+        return await this.reviewRepository.fetchAdditionalReviewsByProduct(productId, skip, take)
+    }
     async getReviewsByUser(userId: string): Promise<Review[]> {
         return await this.reviewRepository.getReviewsByUser(userId)
     }

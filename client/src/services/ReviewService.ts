@@ -18,6 +18,11 @@ class ReviewService {
     async deleteReview(reviewId: string): Promise<void> {
         await api.delete(`${this.ROUTE_PREFIX}/${reviewId}`);
     }
+
+    async fetchAdditionalReviewsByProduct(productId: string, skip: number, take: number): Promise<Review[]> {
+        const reviews = (await api.get<Review[]>(`${this.ROUTE_PREFIX}/product/${productId}/additional?skip=${skip}&take=${take}`)).data;
+        return reviews;
+    }
 }
 
 export default new ReviewService();
