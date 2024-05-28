@@ -4,7 +4,7 @@ import AuthService from "@/services/AuthService";
 import { UserReg } from "@/types/users/auth/UserReg";
 import { UserLogin } from "@/types/users/auth/UserLogin";
 
-type UserState = {
+interface UserState {
     user: UserShort | null;
     isAuth: boolean;
     isLoading: boolean;
@@ -21,6 +21,7 @@ const useUserStore = create<UserState>((set) => ({
     isLoading: true,
 
     setUser: (user) => {
+        console.log("Setting user:", user);
         set({ user })
     },
     setIsAuth: (value) => {
@@ -33,7 +34,7 @@ const useUserStore = create<UserState>((set) => ({
     registrate: async (data) => {
         try {
             const response = await AuthService.registrate(data)
-            localStorage.setItem("token", response.tokens.accessToken)
+            localStorage.setItem("accessToken", response.tokens.accessToken)
         } catch (e) {
             console.log(e)
         }
@@ -42,7 +43,7 @@ const useUserStore = create<UserState>((set) => ({
         try {
             const response = await AuthService.login(data)
 
-            localStorage.setItem("token", response.tokens.accessToken)
+            localStorage.setItem("accessToken", response.tokens.accessToken)
             
             set({ user: response.user, isAuth: true })
             
@@ -56,7 +57,7 @@ const useUserStore = create<UserState>((set) => ({
     },
     logout: async () => {
         await AuthService.logout()
-        localStorage.removeItem('token')
+        localStorage.removeItem('accessToken')
 
         set({ user: null, isAuth: false })
     },
@@ -64,7 +65,8 @@ const useUserStore = create<UserState>((set) => ({
         try {
             const response = await AuthService.refresh()
 
-            localStorage.setItem('token', response.tokens.accessToken)
+            localStorage.setItem('accessToken', response.tokens.accessToken)
+            console.log(response.user)
             set({ user: response.user, isAuth: true })
         } catch(e) {
             console.log(e)

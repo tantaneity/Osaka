@@ -57,7 +57,7 @@ export class UserService {
 
         const tokens = await this.generateAndStoreTokens(user)
 
-        return { userData, ...tokens }
+        return { user:userData, ...tokens }
     }
 
     async getAllUsers(): Promise<UserInfoDto[]> {

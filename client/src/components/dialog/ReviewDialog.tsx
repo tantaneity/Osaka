@@ -19,7 +19,7 @@ import Review from '@/types/review/Review';
 interface ReviewDialogProps {
   open: boolean;
   handleOpen: () => void;
-  reviews: Review[];
+  reviews: Review[]
 }
 
 export function ReviewDialog({ open, handleOpen, reviews }: ReviewDialogProps) {
@@ -39,9 +39,9 @@ export function ReviewDialog({ open, handleOpen, reviews }: ReviewDialogProps) {
   });
 
   return (
-    <Dialog open={open} handler={handleOpen}>
+    <Dialog open={open} handler={handleOpen} className=''>
       <DialogHeader>Reviews</DialogHeader>
-      <DialogBody divider>
+      <DialogBody divider className='h-[32rem] overflow-y-scroll'>
         <div className="mb-4">
           <Select
             label="Sort by"
