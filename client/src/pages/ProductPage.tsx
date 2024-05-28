@@ -95,7 +95,7 @@ const ProductPage: React.FC = () => {
     return (
         <section className="py-8 px-4 sm:px-8">
             <div className="mx-auto container grid place-items-center gap-8 grid-cols-1 lg:grid-cols-2 ">
-                <CartButton onClick={handleCartButtonClick} />
+                
                 <CartDrawler open={drawerOpen} onClose={closeDrawer} />
                 <Card className="w-full max-w-md lg:max-w-xl min-h-[32rem] flex flex-col justify-between" variant="gradient">
                     <Carousel
@@ -189,6 +189,7 @@ const ProductPage: React.FC = () => {
             ) : (
                 <LoginDialog open={!isAuth && openReviewForm} handleOpen={handleOpenReviewForm} />
             )}
+            <CartButton onClick={handleCartButtonClick} />
         </section>
     );
 };

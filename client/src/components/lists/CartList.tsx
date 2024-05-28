@@ -4,6 +4,7 @@ import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
 import { Avatar, IconButton, List, ListItem, ListItemPrefix, ListItemSuffix, Typography, Button } from '@material-tailwind/react';
 import { convertToBase64 } from '@/lib/utils';
 import { isProduct } from '@/types/shop/cart/CartItem';
+import CartIsEmptyLayer from '../layer/CartIsEmptyLayer';
 
 interface CartListProps {
     cartId: string; 
@@ -60,15 +61,19 @@ const CartList: React.FC<CartListProps> = ({ cartId }) => {
             <List>
                 {cartItems && cartItems.length > 0 ? (
                     cartItems.map((cartItem) => (
+                        
                         <ListItem ripple={false} className="w-max h-max" key={cartItem.id}>
                             {isProduct(cartItem.product) && (
                                 <ListItemPrefix>
-                                    <Avatar 
-                                        variant='rounded'
-                                        alt={cartItem.product.name}
-                                        src={convertToBase64(cartItem.product.images[0]?.data.data)}
-                                        className="w-24 h-24"
-                                    />
+                                    <a href={`../drinks/${cartItem.product.id}`}>
+                                        <Avatar 
+                                            variant='rounded'
+                                            alt={cartItem.product.name}
+                                            src={convertToBase64(cartItem.product.images[0]?.data.data)}
+                                            className="w-24 h-24"
+                                        />
+                                    </a>
+                                    
                                 </ListItemPrefix>
                             )}
                             <div className="flex-grow">
@@ -93,7 +98,7 @@ const CartList: React.FC<CartListProps> = ({ cartId }) => {
                         </ListItem>
                     ))
                 ) : (
-                    <Typography variant="h6" className="text-center mt-4">Nothing here</Typography>
+                    <CartIsEmptyLayer/>
                 )}
             </List>
         </div>
