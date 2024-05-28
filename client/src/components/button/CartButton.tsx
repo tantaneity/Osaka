@@ -11,14 +11,12 @@ interface CartButtonProps {
 const CartButton: React.FC<CartButtonProps> = ({ onClick }) => {
     const { user } = useUserStore();
     const { data: cartData } = useGetCartsByUserId(user?.id);
-
-    console.log(cartData)
     const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
     const { data: cartItems } = useGetCartItemsByCartId(cartId);
     const totalQuantity = cartItems?.reduce((total, item) => total + item.quantity, 0)
     return (
         <div className="fixed bottom-6 right-6">
-            <Badge content={totalQuantity} invisible={cartItems?.length == 0 ? true : false}>
+            <Badge content={totalQuantity} invisible={cartItems?.length == 0 ? true : false || !cartData || !cartItems || totalQuantity === 0}>
                 <Button
                     color="black"
                     size="lg"
