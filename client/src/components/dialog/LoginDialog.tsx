@@ -1,43 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, Card, CardBody, CardFooter, Typography, Input, Checkbox, Button, IconButton } from '@material-tailwind/react';
+import { Dialog, Card, CardBody, CardFooter, Typography, Checkbox, Button, IconButton } from '@material-tailwind/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import useUserStore from '@/store/UserStore';
-import { useGetUserByUsername } from '@/hooks/useGetUsers';
 import toast, { Toaster } from 'react-hot-toast';
+import InputField from '../input/InputField ';
+import { useGetUserByUsername } from '@/hooks/useGetUsers';
 
 interface LoginDialogProps {
   open: boolean;
   handleOpen: () => void;
 }
-
-interface InputFieldProps {
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
-  error?: string;
-}
-
-const InputField: React.FC<InputFieldProps> = ({ label, value, onChange, type = 'text', error }) => (
-  <div>
-    <Typography className="-mb-2 mb-2" variant="h6">
-      {label}
-    </Typography>
-    <Input
-      label={label}
-      size="lg"
-      value={value}
-      onChange={onChange}
-      type={type}
-      error={!!error}
-    />
-    {error && (
-      <Typography className="text-red-500" variant="small">
-        {error}
-      </Typography>
-    )}
-  </div>
-);
 
 export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) => {
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
@@ -253,3 +225,5 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
     </Dialog>
   );
 };
+
+export default LoginDialog;

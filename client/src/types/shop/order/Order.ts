@@ -1,10 +1,10 @@
-import User from "../../users/User"
-import OrderItem from "./OrderItem"
-import OrderStatus from "./OrderStatus"
+import { OrderItem } from "./OrderItem"
+import { OrderStatus } from "./OrderStatus"
 
-export default interface Order {
+
+export interface Order {
     id: string
-    user: User | {id: string}
+    user: {id: string}
     orderStatus: OrderStatus
     orderApprovedAt: Date
     orderDeliveredCarrierDate: Date

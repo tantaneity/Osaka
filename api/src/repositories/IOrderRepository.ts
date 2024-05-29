@@ -4,6 +4,7 @@ import OrderStatus from "../models/common/shopping/orders/OrderStatus";
 
 export interface IOrderRepository {
     getOrderById(orderId: string): Promise<Order | null>;
+    getOrdersByUserId(userId: string): Promise<Order[]>
     createOrder(orderData: Order): Promise<Order>;
     updateOrder(orderId: string, orderData: Partial<Order>): Promise<Order | null>;
     deleteOrder(orderId: string): Promise<boolean>;

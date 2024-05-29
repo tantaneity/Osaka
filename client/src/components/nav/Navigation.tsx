@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 
 import {
@@ -9,7 +9,6 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Avatar,
   Card,
   IconButton,
   Collapse,
@@ -18,9 +17,6 @@ import {
   UserCircleIcon,
   Square3Stack3DIcon,
   ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  PowerIcon,
   Bars2Icon,
   HeartIcon,
   NewspaperIcon,
@@ -33,10 +29,9 @@ import { useGetPages } from "@/hooks/usePages";
 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { data: pages, isLoading, isError } = useGetPages();
+  const { data: pages} = useGetPages();
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const isAuth = useUserStore((state) => state.isAuth);
-  const closeMenu = () => setIsMenuOpen(false);
   const handleOpenLoginDialog = () => {
     setOpenLoginDialog(!openLoginDialog);
   };
@@ -188,7 +183,7 @@ function NavList() {
             </Typography>
           ))}
             {isAuth && isAdmin && <Typography
-                key="Admin panel"
+                key="Dashboard"
                 as="a"
                 href="/admin"
                 variant="small"

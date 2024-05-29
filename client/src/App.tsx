@@ -7,6 +7,7 @@ import useUserStore from './store/UserStore';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 import ProductPage from './pages/ProductPage';
+import AccountPage from './pages/AccountPage';
 
 
 
@@ -30,6 +31,10 @@ function App() {
           {
               path: '/drinks/:productId',
               element: <Suspense children={<ProductPage />} />,
+          },
+          {
+              path: '/user/:navigate',
+              element: <Suspense children={<AccountPage />} />,
           },
 
           

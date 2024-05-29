@@ -45,4 +45,8 @@ export class OrderService {
     async getAllOrderStatuses(): Promise<OrderStatus[]> {
         return await this.orderRepository.getAllOrderStatuses();
     }
+
+    async getOrdersByUserId(userId: string): Promise<Order[]> {
+        return await this.orderRepository.getOrdersByUserId(userId);
+    }
 }

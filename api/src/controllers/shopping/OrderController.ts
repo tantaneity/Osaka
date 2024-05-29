@@ -119,4 +119,14 @@ export class OrderController {
             next(error);
         }
     }
+
+    async getOrdersByUserId(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userId = req.params.userId as string;
+            const orders = await this.orderService.getOrdersByUserId(userId);
+            res.json(orders);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

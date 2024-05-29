@@ -11,7 +11,7 @@ export class OrderMapper {
     static fromOrderEntityToOrder(orderEntity: OrderEntity): Order {
         return {
             id: orderEntity.id,
-            user: UserMapper.fromUserEntityToUser(orderEntity.user),
+            user: {id: orderEntity.user.id},
             orderStatus: orderEntity.orderStatus,
             orderApprovedAt: orderEntity.orderApprovedAt,
             orderDeliveredCarrierDate: orderEntity.orderDeliveredCarrierDate,
@@ -24,8 +24,8 @@ export class OrderMapper {
     static fromOrderItemEntityToOrderItem(entity: OrderItemEntity): OrderItem {
         return {
             id: entity.id,
-            product: entity.product,
-            order: this.fromOrderEntityToOrder(entity.order),
+            product: {id: entity.product.id},
+            order: {id: entity.order.id},
             price: entity.price,
             quantity: entity.quantity
         }
