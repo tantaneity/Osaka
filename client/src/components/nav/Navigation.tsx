@@ -24,6 +24,7 @@ import {
   Bars2Icon,
   HeartIcon,
   NewspaperIcon,
+  UserIcon
 } from "@heroicons/react/24/solid";
 import useUserStore from "@/store/UserStore";
 import { LoginDialog } from "../dialog/LoginDialog";
@@ -118,14 +119,17 @@ const navListItems = [
   {
     label: "Account",
     icon: UserCircleIcon,
+    href: '/user/my-orders'
   },
   {
     label: "Wish",
     icon: HeartIcon,
+    href: '/wishlist'
   },
   {
     label: "News",
     icon: NewspaperIcon,
+    href: '/news'
   },
 ];
 
@@ -164,11 +168,11 @@ function NavList() {
       
       {isAuth && (
         <>
-          {navListItems.map(({ label, icon }) => (
+          {navListItems.map(({ label, icon, href }) => (
             <Typography
               key={label}
               as="a"
-              href="#"
+              href={href}
               variant="small"
               color="gray"
               className="font-medium text-blue-gray-500"
@@ -179,8 +183,23 @@ function NavList() {
                 })}{" "}
                 <span className="text-gray-900"> {label}</span>
               </MenuItem>
+              
             </Typography>
           ))}
+            <Typography 
+                href="/admin"
+                variant="small"
+                color="gray"
+                className="font-medium text-blue-gray-500">
+              <MenuItem
+              className="flex items-center gap-2 lg:rounded-full">
+                {React.createElement(UserIcon, {
+                  className: "h-[18px] w-[18px]",
+                })}{" "}
+                <span className="text-gray-900"> Admin panel</span>
+              </MenuItem>
+            </Typography>
+            {/* TODO: Adapt to the users role */}
         </>
       )}
     </ul>
