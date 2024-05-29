@@ -135,6 +135,7 @@ const navListItems = [
 
 function NavList() {
   const isAuth = useUserStore((state) => state.isAuth);
+  const isAdmin = useUserStore((state) => state.isAdmin);
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
   const [loading] = useState(true);
 
@@ -186,7 +187,9 @@ function NavList() {
               
             </Typography>
           ))}
-            <Typography 
+            {isAuth && isAdmin && <Typography
+                key="Admin panel"
+                as="a"
                 href="/admin"
                 variant="small"
                 color="gray"
@@ -198,7 +201,7 @@ function NavList() {
                 })}{" "}
                 <span className="text-gray-900"> Admin panel</span>
               </MenuItem>
-            </Typography>
+            </Typography>}
             {/* TODO: Adapt to the users role */}
         </>
       )}

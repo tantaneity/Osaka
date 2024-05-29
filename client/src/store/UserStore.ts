@@ -3,13 +3,17 @@ import { create } from "zustand";
 import AuthService from "@/services/AuthService";
 import { UserReg } from "@/types/users/auth/UserReg";
 import { UserLogin } from "@/types/users/auth/UserLogin";
+import { value } from "@material-tailwind/react/types/components/chip";
+import AdminService from "@/services/AdminService";
 
 interface UserState {
     user: UserShort | null;
     isAuth: boolean;
     isLoading: boolean;
+    isAdmin: boolean;
     setUser: (user: UserShort) => void;
     setIsAuth: (value: boolean) => void;
+    setIsAdmin: (value: boolean) => void;
     registrate: (data: UserReg) => void;
     login: (data: UserLogin) => void;
     logout: () => void;
@@ -19,6 +23,7 @@ const useUserStore = create<UserState>((set) => ({
     user: null,
     isAuth: false,
     isLoading: true,
+    isAdmin: false,
 
     setUser: (user) => {
         console.log("Setting user:", user);
@@ -26,6 +31,9 @@ const useUserStore = create<UserState>((set) => ({
     },
     setIsAuth: (value) => {
         set({ isAuth: value })
+    },
+    setIsAdmin: (value) => {
+        set({isAdmin: value})
     },
     setIsLoading: (value: boolean) => {
         set({ isLoading: value })
@@ -64,10 +72,13 @@ const useUserStore = create<UserState>((set) => ({
     checkAuth: async () => {
         try {
             const response = await AuthService.refresh()
-
+            
             localStorage.setItem('accessToken', response.tokens.accessToken)
             console.log(response.user)
             set({ user: response.user, isAuth: true })
+            const isAdmin = await AdminService.getAdminByUserId(response.user.id)
+            set({isAdmin: !!isAdmin})
+            
         } catch(e) {
             console.log(e)
         } finally {

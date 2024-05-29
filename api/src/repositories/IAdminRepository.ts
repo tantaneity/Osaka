@@ -4,6 +4,7 @@ import AdminShortDto from "../models/dtos/user/AdminDto";
 
 export interface IAdminRepository {
     getAdminById(adminId: string): Promise<Admin | null>;
+    getAdminByUserId(userId: string): Promise<Admin | null>;
     createAdmin(adminData: Admin): Promise<Admin>;
     updateAdmin(adminId: string, adminData: Partial<Admin>): Promise<Admin | null>;
     deleteAdmin(adminId: string): Promise<boolean>;

@@ -24,7 +24,7 @@ app.use(cors({
 }))
 
 app.use('/api/users', UserRouter)
-app.use('/api/admin', AdminRouter)
+app.use('/api/admins', AdminRouter)
 app.use('/api/drinks', ProductRouter)
 app.use('/api/category', CategoryRouter)
 app.use('/api/sells', SellsRouter)

@@ -19,7 +19,12 @@ export class PgAdminRepository implements IAdminRepository {
     }
 
     async getAdminById(adminId: string): Promise<Admin | null> {
-        const admin = await this.adminRepository.findOne({ where: { id: adminId } });
+        const admin = await this.adminRepository.findOne({ where: { id: adminId }, relations: ['user', 'permissions'] });
+        return admin ? AdminMapper.fromAdminEntityToAdmin(admin) : null;
+    }
+
+    async getAdminByUserId(userId: string): Promise<Admin | null> {
+        const admin = await this.adminRepository.findOne({ where: { user: {id: userId} }, relations: ['user', 'permissions'] });
         return admin ? AdminMapper.fromAdminEntityToAdmin(admin) : null;
     }
 
