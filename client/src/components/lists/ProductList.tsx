@@ -1,5 +1,5 @@
 import { useGetProducts } from '@/hooks/useProducts';
-import ProductCard from '../card/Card';
+import ProductCard from '../card/ProductCard';
 import { CardPlacehoderSkeleton } from '../skeleton/CardSkeleton';
 
 function ProductList() {
