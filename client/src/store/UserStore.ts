@@ -3,7 +3,6 @@ import { create } from "zustand";
 import AuthService from "@/services/AuthService";
 import { UserReg } from "@/types/users/auth/UserReg";
 import { UserLogin } from "@/types/users/auth/UserLogin";
-import { value } from "@material-tailwind/react/types/components/chip";
 import AdminService from "@/services/AdminService";
 
 interface UserState {
@@ -11,9 +10,10 @@ interface UserState {
     isAuth: boolean;
     isLoading: boolean;
     isAdmin: boolean;
-    setUser: (user: UserShort) => void;
+    setUser: (user: UserShort | null) => void;
     setIsAuth: (value: boolean) => void;
     setIsAdmin: (value: boolean) => void;
+    setIsLoading: (value: boolean) => void;
     registrate: (data: UserReg) => void;
     login: (data: UserLogin) => void;
     logout: () => void;

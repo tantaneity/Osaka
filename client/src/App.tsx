@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 import ProductPage from './pages/ProductPage';
 import AccountPage from './pages/AccountPage';
+import AuthProvider from './providers/AuthProvider';
 
 
 
@@ -42,16 +43,19 @@ function App() {
   }])
   return (
     <>
-     <QueryClientProvider client={queryClient}>
-      <div className="bg-blue-gray-100">
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <div className="bg-blue-gray-100">
+          
+          <NavBar/>
+            <RouterProvider router={browserRouter} />
+          <Footer/>
         
-        <NavBar/>
-          <RouterProvider router={browserRouter} />
-        <Footer/>
-      
-      </div>
-      
-      </QueryClientProvider>
+        </div>
+        
+        </QueryClientProvider>
+    </AuthProvider>
+     
     </>
   )
 }

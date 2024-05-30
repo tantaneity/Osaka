@@ -6,6 +6,7 @@ import { UserMapper } from '../../mappers/UserMapper'
 import User from '../../common/users/User'
 import { ApiError } from '../../../errors/api/ApiError'
 import { AppDataSource } from '../../../config/data-source'
+import bcrypt from 'bcrypt'
 
 export class PgUserRepository implements IUserRepository {
     
@@ -62,7 +63,17 @@ export class PgUserRepository implements IUserRepository {
             throw ApiError.internalServerError('Failed to update user', error)
         }
     }
+    async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+        if (!user) throw ApiError.notFound('User not found');
 
+        const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!passwordMatch) throw ApiError.unauthorized('Current password is incorrect');
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await this.userRepository.save(user);
+        return true;
+    }
     async deleteUser(userId: string): Promise<boolean> {
         try {
             const user = await this.userRepository.findOne({ where: { id: userId } })
@@ -75,21 +86,6 @@ export class PgUserRepository implements IUserRepository {
         }
     }
 
-    async signIn(userCredentials: UserSignInDto): Promise<User | null> {
-        try {
-            return null
-        } catch (error: any) {
-            throw ApiError.internalServerError('Failed to sign in user', error)
-        }
-    }
-
-    async resetPassword(userData: UserResetPasswordDto): Promise<boolean> {
-        try {
-            return false
-        } catch (error: any) {
-            throw ApiError.internalServerError('Failed to reset password', error)
-        }
-    }
     async getUserByEmail(email: string): Promise<User | null> {
         console.log(`Fetching user with email: ${email}`);
         try {

@@ -23,6 +23,18 @@ export class UserService {
         return UserMapper.toUserInfoDto(user)
     }
 
+    async updateUser(userId: string, userData: Partial<UserInfoDto>): Promise<UserInfoDto | null> {
+        const updatedUser = await this.userRepository.updateUser(userId, userData);
+        if (!updatedUser) {
+            throw ApiError.notFound("User not found");
+        }
+        return UserMapper.toUserInfoDto(updatedUser);
+    }
+    
+    async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+        return this.userRepository.changePassword(userId, currentPassword, newPassword);
+    }
+
     async getUserByEmail(email: string): Promise<UserInfoDto | null> {
         const user = await this.userRepository.getUserByEmail(email)
         if (!user) {
@@ -90,10 +102,6 @@ export class UserService {
 
     async logout(refreshToken: string) {
         return await this.tokenService.deleteToken(refreshToken)
-    }
-
-    async resetPassword(userData: UserResetPasswordDto): Promise<boolean> {
-        return this.userRepository.resetPassword(userData)
     }
 
     async registration(username: string, first_name: string, last_name: string, email: string, password: string) {

@@ -58,7 +58,7 @@ export function ReviewDialog({ open, handleOpen, reviews }: ReviewDialogProps) {
           {sortedReviews.map((review) => (
             <ListItem key={review.id}>
               <ListItemPrefix>
-                <Avatar variant="circular" alt={review.user.username} src="https://i.pinimg.com/564x/52/c0/e0/52c0e0645cb20c53e8f9bff06ad9d5ab.jpg" />
+                <Avatar variant="circular" alt={review.user.username} src="https://i.pinimg.com/736x/db/6d/82/db6d825d095689b9a37ebbcc083d6115.jpg" />
               </ListItemPrefix>
               <div>
                 <Typography variant="h6" color="blue-gray">

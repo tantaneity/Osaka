@@ -19,7 +19,7 @@ import {
           {reviews.map((review) => (
             <ListItem key={review.id}>
               <ListItemPrefix>
-                <Avatar variant="circular" alt={review.user.username} src="https://i.pinimg.com/564x/52/c0/e0/52c0e0645cb20c53e8f9bff06ad9d5ab.jpg" />
+                <Avatar variant="circular" alt={review.user.username} src="https://i.sstatic.net/l60Hf.png" />
               </ListItemPrefix>
               <div>
                 <Typography variant="h6" color="blue-gray">
