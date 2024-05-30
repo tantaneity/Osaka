@@ -4,6 +4,7 @@ import AccountNav from '@/components/nav/AccountNav';
 import MyOrders from '@/components/layout/MyOrders';
 import UpdateProfile from '@/components/layout/UpdateProfile';
 import ChangePassword from '@/components/layout/ChangePassword';
+import AuthOnly from '@/access/AuthOnly';
 
 const AccountPage: React.FC = () => {
   const { navigate } = useParams<{ navigate: string }>();
@@ -22,12 +23,12 @@ const AccountPage: React.FC = () => {
   };
 
   return (
-    <>
-    <div className='m-10 flex space-x-4'>
-      {navigate && <AccountNav navigate={navigate} />}
-      {renderLayout()}
-    </div>
-    </>
+    <AuthOnly>
+      <div className='m-10 flex space-x-4'>
+        {navigate && <AccountNav navigate={navigate} />}
+        {renderLayout()}
+      </div>
+    </AuthOnly>
     
   );
 };

@@ -11,9 +11,6 @@ interface InputFieldProps {
 
 const InputField: React.FC<InputFieldProps> = ({ label, value, onChange, type = 'text', error }) => (
   <div>
-    <Typography className="-mb-2 mt-2" variant="h6">
-      {label}
-    </Typography>
     <Input
       label={label}
       size="lg"
