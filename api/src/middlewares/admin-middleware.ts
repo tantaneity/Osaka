@@ -24,7 +24,7 @@ export const adminMiddleware = async (req: Request, res: Response, next: NextFun
         const admin = await adminService.getAdminById(userData.id);
 
         if (!admin) {
-            return next(ApiError.unauthorized('User is not an admin'));
+            return next(ApiError.badRequest('User is not an admin'));
         }
         next()
     } catch (e) {
