@@ -17,8 +17,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, value, onChange, type = 
       value={value}
       onChange={onChange}
       type={type}
-      error={!!error}
-    />
+      error={!!error} crossOrigin={undefined}    />
     {error && (
       <Typography className="text-red-500" variant="small">
         {error}

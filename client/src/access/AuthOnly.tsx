@@ -6,15 +6,12 @@ interface AuthOnlyProps {
     children?: ReactNode
 }
 function AuthOnly({ children }: AuthOnlyProps): ReactNode {
-    const isAuth = useUserStore(state => state.isAuth)
-    console.log(isAuth)
-    const isLoading = useUserStore(state => state.isLoading)
-
+    const {isAuth, isLoading} = useUserStore()
+    
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!isAuth && !isLoading) {
-            console.log('LOL')
+        if (!isLoading && !isAuth) {
             navigate('/')
         }
     }, [isLoading, isAuth, navigate])

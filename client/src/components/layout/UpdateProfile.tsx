@@ -42,32 +42,28 @@ const UpdateProfile: React.FC = () => {
           label='First Name'
           value={formData.first_name}
           onChange={handleChange}
-          className='w-full'
-        />
+          className='w-full' crossOrigin={undefined}        />
         <Input
           type='text'
           name='last_name'
           label='Last Name'
           value={formData.last_name}
           onChange={handleChange}
-          className='w-full'
-        />
+          className='w-full' crossOrigin={undefined}        />
         <Input
           type='text'
           name='email'
           label='Email'
           value={formData.email}
           onChange={handleChange}
-          className='w-full'
-        />
+          className='w-full' crossOrigin={undefined}        />
         <Input
           type='text'
           name='username'
           label='Username'
           value={formData.username}
           onChange={handleChange}
-          className='w-full'
-        />
+          className='w-full' crossOrigin={undefined}        />
         <Button type='submit' fullWidth>
           Update Profile
         </Button>

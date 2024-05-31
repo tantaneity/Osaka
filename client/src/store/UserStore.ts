@@ -74,7 +74,6 @@ const useUserStore = create<UserState>((set) => ({
             const response = await AuthService.refresh()
             
             localStorage.setItem('accessToken', response.tokens.accessToken)
-            console.log(response.user)
             set({ user: response.user, isAuth: true })
             const isAdmin = await AdminService.getAdminByUserId(response.user.id)
             set({isAdmin: !!isAdmin})

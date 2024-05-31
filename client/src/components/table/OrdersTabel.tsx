@@ -1,14 +1,15 @@
 import { useGetOrdersByUserId } from "@/hooks/useOrders";
 import useUserStore from "@/store/UserStore";
-import { Card, Typography } from "@material-tailwind/react";
+import { Card, Spinner, Typography } from "@material-tailwind/react";
 import { format } from 'date-fns';
 
 export function OrderTable() {
-    const {user} = useUserStore()
-    const { data: orders, isLoading, isError } = useGetOrdersByUserId(user?.id);
+  const {user} = useUserStore()
+  const { data: orders, isLoading } = useGetOrdersByUserId(user?.id);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching orders</div>;
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen"><Spinner /></div>;
+  }
 
   if (!orders || orders.length === 0) {
     return <div>No orders available</div>;
@@ -71,11 +72,14 @@ export function OrderTable() {
                   </Typography>
                 </td>
                 <td className="p-2 md:p-4">
-                  <button>
-                    <Typography variant="small" color="blue-gray" className="font-medium">
-                      View
-                    </Typography>
-                  </button>
+                  <a href={`order/${order.id}`}>
+                    <button>
+                      <Typography variant="small" color="blue-gray" className="font-medium">
+                        View
+                      </Typography>
+                    </button>
+                  </a>
+                  
                 </td>
               </tr>
             ))}

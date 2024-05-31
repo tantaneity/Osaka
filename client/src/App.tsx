@@ -1,13 +1,14 @@
 import { NavBar } from './components/nav/Navigation';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Footer } from './components/footer/Footer';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/home/HomePage';
 import { Suspense } from "react"
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
-import ProductPage from './pages/ProductPage';
-import AccountPage from './pages/AccountPage';
+import ProductPage from './pages/products/ProductPage';
+import AccountPage from './pages/account/AccountPage';
 import AuthProvider from './providers/AuthProvider';
+import OrderPage from './pages/orders/OrderPage';
 
 
 
@@ -29,12 +30,15 @@ function App() {
               path: '/user/:navigate',
               element: <Suspense children={<AccountPage />} />,
           },
+          {
+              path: '/user/order/:orderId',
+              element: <Suspense children={<OrderPage />} />,
+          },
 
           
       ]
   }])
   return (
-    <>
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <div className="bg-blue-gray-100">
@@ -44,11 +48,8 @@ function App() {
           <Footer/>
         
         </div>
-        
         </QueryClientProvider>
     </AuthProvider>
-     
-    </>
   )
 }
 

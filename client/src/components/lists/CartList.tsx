@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDeleteCartItem, useGetCartItemsByCartId, useUpdateCartItem } from '@/hooks/useCart';
 import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
-import { Avatar, IconButton, List, ListItem, ListItemPrefix, ListItemSuffix, Typography, Button } from '@material-tailwind/react';
+import { Avatar, IconButton, List, ListItem, ListItemPrefix, ListItemSuffix, Typography} from '@material-tailwind/react';
 import { convertToBase64 } from '@/lib/utils';
 import { isProduct } from '@/types/shop/cart/CartItem';
 import CartIsEmptyLayer from '../layer/CartIsEmptyLayer';

@@ -1,3 +1,4 @@
+import AdminService from "@/services/AdminService";
 import AuthService from "@/services/AuthService";
 import useUserStore from "@/store/UserStore";
 import { useEffect, ReactNode } from "react";
@@ -7,11 +8,7 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { setIsAuth, setIsLoading, setUser } = useUserStore((state) => ({
-    setIsAuth: state.setIsAuth,
-    setIsLoading: state.setIsLoading,
-    setUser: state.setUser,
-  }));
+  const { setIsAuth, setIsLoading, setUser, setIsAdmin } = useUserStore();
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -23,6 +20,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           const { user, tokens } = data;
           setUser({ ...user });
           setIsAuth(true);
+          const isAdmin = await AdminService.getAdminByUserId(user.id)
+          setIsAdmin(!!isAdmin)
           localStorage.setItem('accessToken', tokens.accessToken);
         } catch (error) {
           setUser(null);

@@ -59,11 +59,11 @@ const OrderStatusCards: React.FC = () => {
         textColor="text-orange-600"
       />
       <OrderStatusCard
-        icon={<TruckIcon className='h-[25px] w-[25px]' color='blue' />}
+        icon={<TruckIcon className='h-[25px] w-[25px]' color='indigo' />}
         title="Processing Orders"
         count={processingOrders}
-        bgColor="bg-blue-200"
-        textColor="text-blue-600"
+        bgColor="bg-indigo-100"
+        textColor="text-indigo-300"
       />
       <OrderStatusCard
         icon={<CheckCircleIcon className='h-[25px] w-[25px]' color='green' />}

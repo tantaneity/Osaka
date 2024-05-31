@@ -192,8 +192,7 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
                 <Checkbox
                   label="Remember Me"
                   checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
+                  onChange={(e) => setRememberMe(e.target.checked)} crossOrigin={undefined}                />
               </div>
             </>
           )}

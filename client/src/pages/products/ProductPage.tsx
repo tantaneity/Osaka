@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useGetProductById } from "@/hooks/useProducts";
 import { useGetReviewsByProductId, useCreateReview } from "@/hooks/useReviews";
 import { useParams } from "react-router-dom";
@@ -23,6 +23,7 @@ import { LoginDialog } from '@/components/dialog/LoginDialog';
 import CartButton from '@/components/button/CartButton';
 import CartDrawler from '@/components/drawler/CartDrawler';
 import { useCreateCartItem, useGetCartsByUserId } from '@/hooks/useCart';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ProductPage: React.FC = () => {
     const { productId } = useParams<{ productId: string }>();
@@ -30,15 +31,18 @@ const ProductPage: React.FC = () => {
     const { data: reviewsData, error: reviewsError, isLoading: reviewsLoading } = useGetReviewsByProductId(productId);
     const createReviewMutation = useCreateReview();
    
-    const { isAuth, user, checkAuth } = useUserStore();
+    const { isAuth, user } = useUserStore();
     const [openReviewForm, setOpenReviewForm] = useState(false);
     const [openReviews, setOpenReviews] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const { mutate: addToCart } = useCreateCartItem();
-    const { data: cartData, error: cartError, isLoading: cartLoading } = useGetCartsByUserId(user?.id);
+    const { data: cartData} = useGetCartsByUserId(user?.id);
     const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
     const handleAddToCart = () => {
-        if (productData && cartId) {
+        if (!isAuth){
+            toast.error('Need to login!')
+        }
+        if (isAuth && productData && cartId) {
           addToCart({ product: {id: productData.id}, quantity: 1, cart: { id: cartId} });
         }
       };
@@ -51,11 +55,6 @@ const ProductPage: React.FC = () => {
     const closeDrawer = () => {
         setDrawerOpen(false);
     };
-    useEffect(() => {
-        checkAuth();
-    }, [checkAuth]);
-
-
 
     const handleOpenReviewForm = () => setOpenReviewForm(!openReviewForm);
     const handleOpenReviews = () => setOpenReviews(!openReviews);
@@ -89,11 +88,12 @@ const ProductPage: React.FC = () => {
             rating: review.rating,
             comment: review.comment,
         });
-        handleOpenReviewForm(); // Close the dialog after submission
+        handleOpenReviewForm();
     };
 
     return (
         <section className="py-8 px-4 sm:px-8">
+            <Toaster/>
             <div className="mx-auto container grid place-items-center gap-8 grid-cols-1 lg:grid-cols-2 ">
                 
                 <CartDrawler open={drawerOpen} onClose={closeDrawer} />

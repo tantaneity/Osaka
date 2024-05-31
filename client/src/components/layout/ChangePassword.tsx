@@ -58,24 +58,21 @@ const ChangePassword: React.FC = () => {
                     label='Current Password'
                     value={formData.currentPassword}
                     onChange={handleChange}
-                    className='w-full'
-                />
+                    className='w-full' crossOrigin={undefined}                />
                 <Input
                     type='password'
                     name='newPassword'
                     label='New Password'
                     value={formData.newPassword}
                     onChange={handleChange}
-                    className='w-full'
-                />
+                    className='w-full' crossOrigin={undefined}                />
                 <Input
                     type='password'
                     name='confirmPassword'
                     label='Confirm New Password'
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className='w-full'
-                />
+                    className='w-full' crossOrigin={undefined}                />
                 <Button type='submit' fullWidth>
                     Change Password
                 </Button>
