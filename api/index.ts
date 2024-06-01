@@ -15,6 +15,8 @@ import SellsRouter from './src/routes/SellsRouter'
 import OrderRouter from './src/routes/OrderRouter'
 import PageRouter from './src/routes/PageRouter'
 import HomePageBannerRouter from './src/routes/HomePageBannerRouter'
+import NewsRouter from './src/routes/NewsRouter'
+import WishlistItemRouter from './src/routes/WishlistItemRouter'
 const app = express()
 const PORT = process.env.PORT || 5000
 
@@ -33,8 +35,9 @@ app.use('/api/reviews', ReviewRouter)
 app.use('/api/cart', CartRouter)
 app.use('/api/orders', OrderRouter)
 app.use('/api/pages', PageRouter)
-
+app.use('/api/news', NewsRouter);
 app.use('/api/banners', HomePageBannerRouter)
+app.use('/api/wishlist', WishlistItemRouter)
 
 app.use(errorMiddleware)
 

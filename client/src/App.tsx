@@ -9,6 +9,7 @@ import ProductPage from './pages/products/ProductPage';
 import AccountPage from './pages/account/AccountPage';
 import AuthProvider from './providers/AuthProvider';
 import OrderPage from './pages/orders/OrderPage';
+import WishlistPage from './pages/products/WishlistPage';
 
 
 
@@ -33,6 +34,10 @@ function App() {
           {
               path: '/user/order/:orderId',
               element: <Suspense children={<OrderPage />} />,
+          },
+          {
+              path: '/wishlist/',
+              element: <Suspense children={<WishlistPage />} />,
           },
 
           

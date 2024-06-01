@@ -14,7 +14,7 @@ const OrderListItem: React.FC<{ item: OrderItem }> = ({ item }) => {
     const { data: product, isLoading, isError } = useGetProductById(item.product.id);
 
     if (isLoading) {
-        return <Typography variant="lead">Loading...</Typography>;
+        return <div className="flex justify-center items-center h-screen"><Spinner /></div>;
     }
 
     if (isError || !product) {

@@ -11,6 +11,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconFilled} from "@heroicons/react/24/solid";
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from "@heroicons/react/24/solid";
 import { convertToBase64 } from "@/lib/utils";
 import { ProductPageSkeleton } from "@/components/skeleton/ProductPageSkeleton";
@@ -24,9 +25,10 @@ import CartButton from '@/components/button/CartButton';
 import CartDrawler from '@/components/drawler/CartDrawler';
 import { useCreateCartItem, useGetCartsByUserId } from '@/hooks/useCart';
 import toast, { Toaster } from 'react-hot-toast';
+import { useAddToWishlist, useGetWishlistItemsByUserId, useRemoveFromWishlist } from '@/hooks/useWishlistItem';
 
 const ProductPage: React.FC = () => {
-    const { productId } = useParams<{ productId: string }>();
+    const { productId = ""} = useParams<{ productId?: string }>();
     const { data: productData, error: productError, isLoading: productLoading } = useGetProductById(productId);
     const { data: reviewsData, error: reviewsError, isLoading: reviewsLoading } = useGetReviewsByProductId(productId);
     const createReviewMutation = useCreateReview();
@@ -38,6 +40,32 @@ const ProductPage: React.FC = () => {
     const { mutate: addToCart } = useCreateCartItem();
     const { data: cartData} = useGetCartsByUserId(user?.id);
     const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
+
+    const { mutate: addToWishlist } = useAddToWishlist();
+    const { mutate: removeFromWishlist } = useRemoveFromWishlist();
+    const { data: wishlistItems } = useGetWishlistItemsByUserId(user?.id);
+
+    const [isInWishlist, setIsInWishlist] = useState(() => {
+        if (!wishlistItems || !productData) return false;
+        return wishlistItems.some(item => item.productId === productId);
+    });
+
+    const handleToggleWishlist = () => {
+        if (!isAuth) {
+            toast.error('Need to login!');
+            return;
+        }
+        
+        if (isInWishlist) {
+            removeFromWishlist({ userId: user?.id || '', productId });
+        } else {
+            addToWishlist({ userId: user?.id || '', productId });
+        }
+        
+        setIsInWishlist(prev => !prev); 
+    };
+    
+
     const handleAddToCart = () => {
         if (!isAuth){
             toast.error('Need to login!')
@@ -163,9 +191,21 @@ const ProductPage: React.FC = () => {
                         <Button color="gray" className="w-full lg:w-52" onClick={handleAddToCart}>
                             Add to Cart
                         </Button>
-                        <IconButton color="gray" variant="text" className="shrink-0">
-                            <HeartIcon className="h-6 w-6" />
-                        </IconButton>
+                        {isAuth && (
+                            <IconButton
+                                onClick={handleToggleWishlist}
+                                variant="text"
+                                color="gray"
+                            >
+                            {wishlistItems && wishlistItems.some(item => item.productId === productId) ? (
+                                <HeartIconFilled className="h-6 w-6 text-red-500" />
+                            ) : (
+                                <HeartIcon className="h-6 w-6" />
+                            )}
+                            </IconButton>
+                        )}
+
+
                     </div>
                     <div className="my-4 flex flex-col w-full gap-3 lg:flex-row">
                         <Button color="blue-gray" className="w-full lg:w-52" onClick={handleOpenReviewForm}>

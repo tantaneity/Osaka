@@ -5,6 +5,7 @@ import {ImageEntity} from './ImageEntity'
 import { CartItemEntity } from './CartItemEntity'
 import { SellEntity } from './SellEntity'
 import { OrderItemEntity } from './OrderItemEntity'
+import { WishlistItemEntity } from './WishlistItemEntity'
 @Entity({
     name: "Products"
 })
@@ -42,6 +43,9 @@ export class ProductEntity {
 
     @OneToMany(() => OrderItemEntity, orderItem => orderItem.product)
     orderItems: OrderItemEntity[];
+
+    @OneToMany(() => WishlistItemEntity, wishlistItem => wishlistItem.user)
+    wishlistItems: WishlistItemEntity[];
 
     @CreateDateColumn({ type: 'timestamp', nullable: true })
     dateAdded: Date

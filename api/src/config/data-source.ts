@@ -18,6 +18,9 @@ import { OrderItemEntity } from "../models/entities/OrderItemEntity"
 import { OrderStatusEntity } from "../models/entities/OrderStatusEntity"
 import { PageEntity } from "../models/entities/PageEntity"
 import { HomePageBannerEntity } from "../models/entities/HomePageBannerEntity"
+import { NewsEntity } from "../models/entities/NewsEntity"
+import { ContentBlockEntity } from "../models/entities/ContentBlockEntity"
+import { WishlistItemEntity } from "../models/entities/WishlistItemEntity"
 
 config()
 
@@ -30,7 +33,7 @@ export const AppDataSource = new DataSource({
     database: process.env.PG_USERNAME || 'online_store_db',
     synchronize: true,
     logging: false,
-    entities: [UserEntity, TokenEntity, ProductEntity, CategoryEntity, ReviewEntity, ImageEntity, AdminEntity, PermissionEntity, CartEntity, CartItemEntity, SellEntity, OrderEntity, OrderItemEntity, OrderStatusEntity, PageEntity, HomePageBannerEntity],
+    entities: [UserEntity, TokenEntity, ProductEntity, CategoryEntity, ReviewEntity, ImageEntity, AdminEntity, PermissionEntity, CartEntity, CartItemEntity, SellEntity, OrderEntity, OrderItemEntity, OrderStatusEntity, PageEntity, HomePageBannerEntity, NewsEntity, ContentBlockEntity,WishlistItemEntity],
     migrations: [],
     subscribers: [],
 })
