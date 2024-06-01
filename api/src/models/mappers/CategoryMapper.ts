@@ -6,6 +6,7 @@ export class CategoryMapper {
         return {
             id: entity.id,
             name: entity.name,
+            image: entity.image,
             description: entity.description,
             parentCategory: entity.parentCategory
         }

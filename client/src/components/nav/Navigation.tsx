@@ -36,7 +36,7 @@ function NavListMenu() {
     setOpenLoginDialog(!openLoginDialog);
   };
   const renderItems = pages?.map(({ title, description }) => (
-    <a href="#" key={title}>
+    <a href={title.toLocaleLowerCase()} key={title}>
       <MenuItem>
         <Typography variant="h6" color="blue-gray" className="mb-1">
           {title}
@@ -91,7 +91,7 @@ function NavListMenu() {
       </Menu>
       <MenuItem className="flex items-center gap-2 font-medium text-blue-gray-900 lg:hidden">
         <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
-        Pages{" "}
+        Pages{" "}  
       </MenuItem>
       <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
         {renderItems}
@@ -197,7 +197,6 @@ function NavList() {
                 <span className="text-gray-900"> Admin panel</span>
               </MenuItem>
             </Typography>}
-            {/* TODO: Adapt to the users role */}
         </>
       )}
     </ul>
