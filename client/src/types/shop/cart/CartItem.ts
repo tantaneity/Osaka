@@ -3,7 +3,7 @@ import { Cart } from "./Cart"
 
 export interface CartItem {
     id: string
-    cart: Cart | {id: string}
+    cart?: Cart | {id: string}
     product: Product | {
         id : string
     }

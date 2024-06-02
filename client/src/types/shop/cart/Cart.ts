@@ -4,7 +4,7 @@ import { CartItem } from "./CartItem"
 export interface Cart {
     id: string
     items: CartItem[]
-    user: UserShort
+    user?: UserShort | null
     dateCreated: Date
     dateModified: Date
 }

@@ -1,22 +1,18 @@
 import React from 'react';
 import { Badge, Button } from "@material-tailwind/react";
 import { ShoppingCartIcon } from "@heroicons/react/24/solid";
-import { useGetCartItemsByCartId, useGetCartsByUserId } from '@/hooks/useCart';
-import useUserStore from '@/store/UserStore';
+import useCartStore from '@/store/CartStore';
 
 interface CartButtonProps {
     onClick: () => void;
 }
 
 const CartButton: React.FC<CartButtonProps> = ({ onClick }) => {
-    const { user } = useUserStore();
-    const { data: cartData } = useGetCartsByUserId(user?.id);
-    const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
-    const { data: cartItems } = useGetCartItemsByCartId(cartId);
-    const totalQuantity = cartItems?.reduce((total, item) => total + item.quantity, 0)
+    const { cart } = useCartStore();
+    const totalQuantity = cart?.items.reduce((total, item) => total + item.quantity, 0) || 0;
     return (
         <div className="fixed bottom-6 right-6">
-            <Badge content={totalQuantity} invisible={cartItems?.length == 0 ? true : false || !cartData || !cartItems || totalQuantity === 0}>
+            <Badge content={totalQuantity} invisible={totalQuantity === 0}>
                 <Button
                     color="black"
                     size="lg"

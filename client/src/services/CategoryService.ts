@@ -2,9 +2,9 @@ import { api } from "@/api";
 import { Category } from "@/types/category/Category";
 
 class CategoryService {
-    private ROUTE_PREFIX = 'api/categories';
+    private ROUTE_PREFIX = 'api/category';
 
-    async getCategoryById(categoryId: string): Promise<Category> {
+    async getCategoryById(categoryId: number): Promise<Category> {
         const category = (await api.get<Category>(`${this.ROUTE_PREFIX}/${categoryId}`)).data;
         return category;
     }
@@ -14,12 +14,12 @@ class CategoryService {
         return category;
     }
 
-    async updateCategory(categoryId: string, categoryData: Partial<Category>): Promise<Category> {
+    async updateCategory(categoryId: number, categoryData: Partial<Category>): Promise<Category> {
         const category = (await api.put<Category>(`${this.ROUTE_PREFIX}/${categoryId}`, categoryData)).data;
         return category;
     }
 
-    async deleteCategory(categoryId: string): Promise<void> {
+    async deleteCategory(categoryId: number): Promise<void> {
         await api.delete(`${this.ROUTE_PREFIX}/${categoryId}`);
     }
 
@@ -28,7 +28,7 @@ class CategoryService {
         return categories;
     }
 
-    async getSubcategories(categoryId: string): Promise<Category[]> {
+    async getSubcategories(categoryId: number): Promise<Category[]> {
         const subcategories = (await api.get<Category[]>(`${this.ROUTE_PREFIX}/${categoryId}/subcategories`)).data;
         return subcategories;
     }

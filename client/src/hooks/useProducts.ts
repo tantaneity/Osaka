@@ -23,3 +23,9 @@ export const useCreateProduct = (inputProduct: ProductCreate) => {
         }
     })
 }
+
+export const useSearchProducts = (params: { name?: string; categoryName?: string; minPrice?: number; maxPrice?: number; limit?: number; offset?: number }) => useQuery({
+    queryKey: ['search-products', params],
+    queryFn: () => ProductService.searchProducts(params),
+    enabled: Object.keys(params).length > 0,
+});

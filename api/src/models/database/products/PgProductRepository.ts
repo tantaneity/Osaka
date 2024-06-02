@@ -7,6 +7,10 @@ import Product from '../../common/products/Product'
 import { ProductMapper } from '../../mappers/ProductMapper'
 import { ProductCreateDto, ProductUpdateDto } from '../../dtos/product/ProductDto'
 import Category from '../../common/products/Category'
+import { SearchProductsParams } from '../../../utils/data/Params'
+
+
+
 
 export class PgProductRepository implements IProductRepository {
     
@@ -79,5 +83,34 @@ export class PgProductRepository implements IProductRepository {
     async searchProductsByName(name: string): Promise<Product[]> {
         const products = await this.productRepository.find({ where: { name: ILike(`%${name}%`) } })
         return products.map(product => ProductMapper.fromProductEntityToProduct(product))
+    }
+    async searchProducts(params: SearchProductsParams): Promise<Product[]> {
+        const { name, categoryName, minPrice, maxPrice, limit = 10, offset = 0 } = params;
+
+        let whereConditions = {};
+
+        if (name) {
+            whereConditions = { ...whereConditions, name: ILike(`%${name}%`) };
+        }
+        if (categoryName) {
+            whereConditions = { 
+                ...whereConditions, 
+                categories: {
+                    name: ILike(`%${categoryName}%`)
+                } 
+            };
+        }
+        if (minPrice !== undefined && maxPrice !== undefined) {
+            whereConditions = { ...whereConditions, price: Between(minPrice, maxPrice) };
+        }
+
+        const products = await this.productRepository.find({
+            where: whereConditions,
+            take: limit,
+            skip: offset,
+            relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product']
+        });
+
+        return products.map(product => ProductMapper.fromProductEntityToProduct(product));
     }
 }

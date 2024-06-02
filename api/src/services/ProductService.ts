@@ -2,6 +2,7 @@ import { IProductRepository } from '../repositories/IProductRepository'
 import Product from '../models/common/products/Product'
 import { ApiError } from '../errors/api/ApiError'
 import { ProductCreateDto, ProductUpdateDto } from '../models/dtos/product/ProductDto'
+import { SearchProductsParams } from '../utils/data/Params'
 
 export class ProductService {
     constructor(private readonly productRepository: IProductRepository) {}
@@ -52,5 +53,9 @@ export class ProductService {
 
     async searchProductsByName(name: string): Promise<Product[]> {
         return await this.productRepository.searchProductsByName(name)
+    }
+
+    async searchProducts(params: SearchProductsParams): Promise<Product[]> {
+        return await this.productRepository.searchProducts(params);
     }
 }

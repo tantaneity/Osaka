@@ -1,5 +1,6 @@
 import AdminService from "@/services/AdminService";
 import AuthService from "@/services/AuthService";
+import CartService from "@/services/CartService";
 import useUserStore from "@/store/UserStore";
 import { useEffect, ReactNode } from "react";
 
@@ -8,7 +9,7 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { setIsAuth, setIsLoading, setUser, setIsAdmin } = useUserStore();
+  const { setIsAuth, setIsLoading, setUser, setIsAdmin, setCart } = useUserStore();
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -22,10 +23,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           setIsAuth(true);
           const isAdmin = await AdminService.getAdminByUserId(user.id)
           setIsAdmin(!!isAdmin)
+          const cart = await CartService.getCartsByUserId(user.id)
+          setCart(cart[0])
           localStorage.setItem('accessToken', tokens.accessToken);
         } catch (error) {
           setUser(null);
           setIsAuth(false);
+          setCart(null)
           localStorage.removeItem('accessToken');
           console.error('Failed to refresh token:', error);
         } finally {

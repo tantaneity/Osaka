@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import useUserStore from '@/store/UserStore';
 import toast, { Toaster } from 'react-hot-toast';
 import InputField from '../input/InputField ';
-import { useGetUserByUsername } from '@/hooks/useGetUsers';
+import { useGetUserByEmail, useGetUserByUsername } from '@/hooks/useGetUsers';
 
 interface LoginDialogProps {
   open: boolean;
@@ -69,7 +69,7 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
       if (!regUsername.trim()) {
         newErrors.regUsername = 'Username is required';
         valid = false;
-      } else if (regUsername.length < 3) { // Example: Minimum 3 characters for username
+      } else if (regUsername.length < 3) {
         newErrors.regUsername = 'Username must be at least 3 characters long';
         valid = false;
       }
@@ -83,7 +83,7 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
       if (!regPassword.trim()) {
         newErrors.regPassword = 'Password is required';
         valid = false;
-      } else if (regPassword.length < 8) { // Example: Minimum 8 characters for password
+      } else if (regPassword.length < 8) {
         newErrors.regPassword = 'Password must be at least 8 characters long';
         valid = false;
       }
@@ -91,14 +91,14 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
       if (!loginUsername.trim()) {
         newErrors.loginUsername = 'Username is required';
         valid = false;
-      } else if (loginUsername.length < 3) { // Example: Minimum 3 characters for username
+      } else if (loginUsername.length < 3) {
         newErrors.loginUsername = 'Username must be at least 3 characters long';
         valid = false;
       }
       if (!loginPassword.trim()) {
         newErrors.loginPassword = 'Password is required';
         valid = false;
-      } else if (loginPassword.length < 8) { // Example: Minimum 8 characters for password
+      } else if (loginPassword.length < 8) {
         newErrors.loginPassword = 'Password must be at least 8 characters long';
         valid = false;
       }
@@ -109,6 +109,7 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
   };
   
   const { data: existingUser } = useGetUserByUsername(isSignUp ? regUsername : loginUsername);
+  const { data: existingEmail } = useGetUserByEmail(regEmail);
 
   const handleSignInSignUp = async () => {
     if (!validateForm()) {
@@ -123,9 +124,14 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ open, handleOpen }) =>
           setIsButtonLoading(false);
           return;
         }
+        if (existingEmail) {
+          toast.error("Email already exists.");
+          setIsButtonLoading(false);
+          return;
+        }
         await registrate({ first_name: regFirstName, last_name: regLastName, username: regUsername, email: regEmail, password: regPassword });
         toast.success("Successful registration!");
-        toggleForm(); // Switch to login form after successful registration
+        toggleForm();
       } else {
         if (!existingUser) {
           toast.error("User not found!");

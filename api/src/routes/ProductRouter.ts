@@ -51,5 +51,9 @@ ProductRouter.get('/search/name', async (req: Request, res: Response, next: Next
     await productController.searchProductsByName(req, res, next)
 })
 
+ProductRouter.get('/search', async (req: Request, res: Response, next: NextFunction) => {
+    await productController.searchProducts(req, res, next);
+});
+
 
 export default ProductRouter

@@ -1,107 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import { useDeleteCartItem, useGetCartItemsByCartId, useUpdateCartItem } from '@/hooks/useCart';
+import React from 'react';
 import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
 import { Avatar, IconButton, List, ListItem, ListItemPrefix, ListItemSuffix, Typography} from '@material-tailwind/react';
 import { convertToBase64 } from '@/lib/utils';
-import { isProduct } from '@/types/shop/cart/CartItem';
+import { CartItem, isProduct } from '@/types/shop/cart/CartItem';
 import CartIsEmptyLayer from '../layer/CartIsEmptyLayer';
+import useCartStore from '@/store/CartStore';
+import { useGetProductById } from '@/hooks/useProducts';
 
-interface CartListProps {
-    cartId: string; 
-}
+const CartList: React.FC = () => {
+    const { cart, addItem, removeItem, decreaseItem, loadCart } = useCartStore();
+    
+    const handleIncrease = (productId: string) => {
+        addItem({ id: productId }, 1);
+    };
 
-const CartList: React.FC<CartListProps> = ({ cartId }) => { 
-    const { data: cartItems, isLoading, refetch } = useGetCartItemsByCartId(cartId);
-    const updateItem = useUpdateCartItem();
-    const deleteItem = useDeleteCartItem();
-    const [isUpdating, setIsUpdating] = useState(false);
-
-    useEffect(() => {
-        if (isUpdating) {
-            refetch();
-            setIsUpdating(false);
-        }
-    }, [isUpdating, refetch]);
-
-    const handleIncrease = async (itemId: string) => {
-        const updatedItem = cartItems?.find(item => item.id === itemId);
-        if (updatedItem) {
-            await updateItem.mutateAsync({
-                cartItemId: itemId,
-                cartItemData: {
-                    quantity: updatedItem.quantity + 1
-                }
-            });
-            setIsUpdating(true);
+    const handleDecrease = (productId: string) => {
+        const currentItem = cart?.items.find(item => item.product.id === productId);
+        if (currentItem && currentItem.quantity > 1) {
+            decreaseItem(productId)
         }
     };
 
-    const handleDecrease = async (itemId: string) => {
-        const updatedItem = cartItems?.find(item => item.id === itemId);
-        if (updatedItem && updatedItem.quantity > 1) {
-            await updateItem.mutateAsync({
-                cartItemId: itemId,
-                cartItemData: {
-                    quantity: updatedItem.quantity - 1
-                }
-            });
-            setIsUpdating(true);
-        }
+    const handleRemove = (productId: string) => {
+        removeItem(productId);
     };
-
-    const handleRemove = async (itemId: string) => {
-        await deleteItem.mutateAsync(itemId);
-        setIsUpdating(true);
-    };
-
-    if (isLoading) return <div>Loading...</div>;
 
     return (
         <div className="mb-2 flex items-center justify-between p-4">
             <List>
-                {cartItems && cartItems.length > 0 ? (
-                    cartItems.map((cartItem) => (
-                        
+                {cart?.items && cart.items.length > 0 ? (
+                    cart.items.map((cartItem: CartItem) => (
                         <ListItem ripple={false} className="w-max h-max" key={cartItem.id}>
-                            {isProduct(cartItem.product) && (
-                                <ListItemPrefix>
-                                    <a href={`../drinks/${cartItem.product.id}`}>
-                                        <Avatar 
-                                            variant='rounded'
-                                            alt={cartItem.product.name}
-                                            src={convertToBase64(cartItem.product.images[0]?.data.data)}
-                                            className="w-24 h-24"
-                                        />
-                                    </a>
-                                    
-                                </ListItemPrefix>
-                            )}
-                            <div className="flex-grow">
-                                <Typography variant="h6" className="mb-1">
-                                    {isProduct(cartItem.product) ? cartItem.product.name : 'Unknown Product'}
-                                </Typography>
-                                <div className="flex items-center">
-                                    <IconButton variant="text" color="blue-gray" onClick={() => handleDecrease(cartItem.id)}>
-                                        <MinusIcon className="w-5 h-5" />
-                                    </IconButton>
-                                    <Typography variant="h6" className="mx-2">{cartItem.quantity}</Typography>
-                                    <IconButton variant="text" color="blue-gray" onClick={() => handleIncrease(cartItem.id)}>
-                                        <PlusIcon className="w-5 h-5" />
-                                    </IconButton>
-                                </div>
-                            </div>
-                            <ListItemSuffix>
-                                <IconButton variant="text" color="red" onClick={() => handleRemove(cartItem.id)}>
-                                    <TrashIcon className="w-5 h-5" />
-                                </IconButton>
-                            </ListItemSuffix>
+                            <CartItemDetail cartItem={cartItem} handleDecrease={handleDecrease} handleIncrease={handleIncrease} handleRemove={handleRemove} />
                         </ListItem>
                     ))
                 ) : (
-                    <CartIsEmptyLayer/>
+                    <CartIsEmptyLayer />
                 )}
             </List>
         </div>
+    );
+};
+
+interface CartItemDetailProps {
+    cartItem: CartItem;
+    handleDecrease: (productId: string) => void;
+    handleIncrease: (productId: string) => void;
+    handleRemove: (productId: string) => void;
+}
+
+const CartItemDetail: React.FC<CartItemDetailProps> = ({ cartItem, handleDecrease, handleIncrease, handleRemove }) => {
+    const { data: productData, isLoading } = useGetProductById(cartItem.product.id);
+
+    if (isLoading || !productData) {
+        return (
+            <ListItem ripple={false} className="w-max h-max">
+                <Typography>Loading...</Typography>
+            </ListItem>
+        );
+    }
+
+    return (
+        <>
+            {isProduct(productData) && (
+                <>
+                    <ListItemPrefix>
+                        <a href={`../drinks/${productData.id}`}>
+                            <Avatar 
+                                variant='rounded'
+                                alt={productData.name}
+                                src={convertToBase64(productData.images[0]?.data.data)}
+                                className="w-24 h-24"
+                            />
+                        </a>
+                    </ListItemPrefix>
+                    <div className="flex-grow">
+                        <Typography variant="h6" className="mb-1">
+                            {productData.name}
+                        </Typography>
+                        <div className="flex items-center">
+                            <IconButton variant="text" color="blue-gray" onClick={() => handleDecrease(cartItem.product.id)}>
+                                <MinusIcon className="w-5 h-5" />
+                            </IconButton>
+                            <Typography variant="h6" className="mx-2">{cartItem.quantity}</Typography>
+                            <IconButton variant="text" color="blue-gray" onClick={() => handleIncrease(cartItem.product.id)}>
+                                <PlusIcon className="w-5 h-5" />
+                            </IconButton>
+                        </div>
+                    </div>
+                    <ListItemSuffix>
+                        <IconButton variant="text" color="red" onClick={() => handleRemove(cartItem.product.id)}>
+                            <TrashIcon className="w-5 h-5" />
+                        </IconButton>
+                    </ListItemSuffix>
+                </>
+            )}
+        </>
     );
 };
 

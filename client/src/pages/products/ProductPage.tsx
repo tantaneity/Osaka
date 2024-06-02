@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetProductById } from "@/hooks/useProducts";
 import { useGetReviewsByProductId, useCreateReview } from "@/hooks/useReviews";
 import { useParams } from "react-router-dom";
@@ -23,23 +23,26 @@ import { ReviewDialog } from '@/components/dialog/ReviewDialog';
 import { LoginDialog } from '@/components/dialog/LoginDialog';
 import CartButton from '@/components/button/CartButton';
 import CartDrawler from '@/components/drawler/CartDrawler';
-import { useCreateCartItem, useGetCartsByUserId } from '@/hooks/useCart';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAddToWishlist, useGetWishlistItemsByUserId, useRemoveFromWishlist } from '@/hooks/useWishlistItem';
+import useCartStore from '@/store/CartStore';
 
 const ProductPage: React.FC = () => {
     const { productId = ""} = useParams<{ productId?: string }>();
     const { data: productData, error: productError, isLoading: productLoading } = useGetProductById(productId);
     const { data: reviewsData, error: reviewsError, isLoading: reviewsLoading } = useGetReviewsByProductId(productId);
     const createReviewMutation = useCreateReview();
-   
+    
     const { isAuth, user } = useUserStore();
     const [openReviewForm, setOpenReviewForm] = useState(false);
     const [openReviews, setOpenReviews] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const { mutate: addToCart } = useCreateCartItem();
-    const { data: cartData} = useGetCartsByUserId(user?.id);
-    const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
+    
+    const { cart, addItem, removeItem, clearCart, loadCart } = useCartStore();
+
+    useEffect(() => {
+        loadCart();
+    }, [loadCart, isAuth, user]);
 
     const { mutate: addToWishlist } = useAddToWishlist();
     const { mutate: removeFromWishlist } = useRemoveFromWishlist();
@@ -67,11 +70,10 @@ const ProductPage: React.FC = () => {
     
 
     const handleAddToCart = () => {
-        if (!isAuth){
-            toast.error('Need to login!')
-        }
-        if (isAuth && productData && cartId) {
-          addToCart({ product: {id: productData.id}, quantity: 1, cart: { id: cartId} });
+        if (productData) {
+            addItem({id: productData.id}, 1);
+            console.log(cart)
+            toast.success("Successfull")
         }
       };
 
@@ -86,6 +88,8 @@ const ProductPage: React.FC = () => {
 
     const handleOpenReviewForm = () => setOpenReviewForm(!openReviewForm);
     const handleOpenReviews = () => setOpenReviews(!openReviews);
+
+    
 
     if (productLoading || reviewsLoading) {
         return <div><ProductPageSkeleton /></div>;

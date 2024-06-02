@@ -44,6 +44,11 @@ class ProductService {
         const products = (await api.get<Product[]>(`${this.ROUTE_PREFIX}/search`, { params: { name } })).data
         return products
     }
+
+    async searchProducts(params: { name?: string; categoryName?: string; minPrice?: number; maxPrice?: number; limit?: number; offset?: number }): Promise<Product[]> {
+        const products = (await api.get<Product[]>(`${this.ROUTE_PREFIX}/search`, { params })).data;
+        return products;
+    }
 }
 
 export default new ProductService()

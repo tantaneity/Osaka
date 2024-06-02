@@ -10,6 +10,7 @@ import AccountPage from './pages/account/AccountPage';
 import AuthProvider from './providers/AuthProvider';
 import OrderPage from './pages/orders/OrderPage';
 import WishlistPage from './pages/products/WishlistPage';
+import CategoriesPage from './pages/products/CategoriesPage';
 
 
 
@@ -38,6 +39,10 @@ function App() {
           {
               path: '/wishlist/',
               element: <Suspense children={<WishlistPage />} />,
+          },
+          {
+              path: '/categories/',
+              element: <Suspense children={<CategoriesPage />} />,
           },
 
           

@@ -36,7 +36,7 @@ function NavListMenu() {
     setOpenLoginDialog(!openLoginDialog);
   };
   const renderItems = pages?.map(({ title, description }) => (
-    <a href={title.toLocaleLowerCase()} key={title}>
+    <a href={`/${title.toLocaleLowerCase()}`} key={title}>
       <MenuItem>
         <Typography variant="h6" color="blue-gray" className="mb-1">
           {title}
