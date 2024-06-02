@@ -26,7 +26,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, subcategories }) 
   return (
     
       <Card className="flex flex-col items-center p-4 mb-5 mt-5 w-full">
-        <Link to={`/category/${category.id}`}>
+        <Link to={`/search/?category=${category.name.toLowerCase().replace(/\s+/g, "-")}`}>
             <CardHeader className="h-48">
             <img
                 src={convertToBase64(category.image.data)}
@@ -52,11 +52,11 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, subcategories }) 
             <Typography className="mb-4">{category.description}</Typography>
           </AccordionBody>
         </Accordion>
-
+ 
         <div className="mb-4 w-full">
             <Card className='h-12 bg-indigo-50'>
                 {displayedSubcategories.map((subcategory) => (
-                    <Link key={subcategory.id} to={`/category/${subcategory.id}`} className="block p-4 text-sm text-black-200">
+                    <Link key={subcategory.id} to={`/search/?category=${subcategory.name.toLowerCase().replace(/\s+/g, "-")}`} className="block p-4 text-sm text-black-200">
                     {subcategory.name}
                     </Link>
                 ))}

@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
                 </div>
 
             </div>
-            <CartButton onClick={isAuth ? handleCartButtonClick : handleOpenLoginDialog} />
+            <CartButton onClick={handleCartButtonClick} />
         </>
     );
 };
