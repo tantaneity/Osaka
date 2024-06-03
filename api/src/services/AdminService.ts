@@ -8,17 +8,11 @@ export class AdminService {
 
     async getAdminById(adminId: string): Promise<Admin | null> {
         const admin = await this.adminRepository.getAdminById(adminId);
-        if (!admin) {
-            throw ApiError.notFound('Admin not found');
-        }
         return admin;
     }
 
     async getAdminByUserId(userId: string): Promise<Admin | null> {
         const admin = await this.adminRepository.getAdminByUserId(userId);
-        if (!admin) {
-            throw ApiError.notFound('Admin not found');
-        }
         return admin;
     }
 

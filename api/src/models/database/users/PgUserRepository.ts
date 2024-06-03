@@ -41,13 +41,11 @@ export class PgUserRepository implements IUserRepository {
 
     async getUserById(userId: string): Promise<User | null> {
         const user = await this.userRepository.findOne({ where: { id: userId } })
-        if (!user) throw ApiError.notFound('User not found')
         return user ? UserMapper.fromUserEntityToUser(user) : null
     }
 
     async getUserByUsername(username: string): Promise<User | null> {
         const user = await this.userRepository.findOne({ where: { username: username } })
-        if (!user) throw ApiError.notFound('User not found')
         return user ? UserMapper.fromUserEntityToUser(user) : null
     }
     
@@ -87,15 +85,8 @@ export class PgUserRepository implements IUserRepository {
     }
 
     async getUserByEmail(email: string): Promise<User | null> {
-        console.log(`Fetching user with email: ${email}`);
-        try {
-            const user = await this.userRepository.findOneByOrFail({ email: email });
-            console.log(`User found: ${JSON.stringify(user)}`);
-            return user ? UserMapper.fromUserEntityToUser(user) : null;
-        } catch (error) {
-            console.error(`Error fetching user with email ${email}:`, error);
-            throw ApiError.notFound('User not found');
-        }
+        const user = await this.userRepository.findOne({ where :{email: email }});
+        return user ? UserMapper.fromUserEntityToUser(user) : null;
     }
     
 }

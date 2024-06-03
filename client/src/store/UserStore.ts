@@ -52,7 +52,7 @@ const useUserStore = create<UserState>((set) => ({
             const response = await AuthService.registrate(data)
             localStorage.setItem("accessToken", response.tokens.accessToken)
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
     },
     login: async (data) => {

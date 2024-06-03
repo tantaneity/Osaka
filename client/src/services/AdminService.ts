@@ -11,8 +11,9 @@ class AdminService {
     }
 
     async getAdminByUserId(userId: string): Promise<Admin | null> {
-        const admin = (await api.get<Admin>(`${this.ROUTE_PREFIX}/user/${userId}`)).data;
-        return admin;
+        const admin = (await api.get<Admin>(`${this.ROUTE_PREFIX}/user/${userId}`));
+        if (!admin) return null
+        return admin.data;
     }
 
     async createAdmin(adminData: Admin): Promise<Admin> {
