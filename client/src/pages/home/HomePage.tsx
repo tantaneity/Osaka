@@ -12,6 +12,7 @@ import CartButton from '@/components/button/CartButton';
 import CartDrawler from '@/components/drawler/CartDrawler';
 import useUserStore from '@/store/UserStore';
 import { LoginDialog } from '@/components/dialog/LoginDialog';
+import InputSearch from '@/components/input/InputSearch';
 
 const HomePage: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -74,6 +75,7 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
                 <div className="relative bg-gray-100 border-b-2 p-4 w-full">
+                    
                     <ProductList />
                 </div>
 

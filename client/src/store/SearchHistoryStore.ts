@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 interface SearchHistoryState {
   history: string[];
@@ -6,18 +6,28 @@ interface SearchHistoryState {
   clearHistory: () => void;
 }
 
-const useSearchHistoryStore = create<SearchHistoryState>((set) => ({
-  history: [],
+const useSearchHistoryStore = create<SearchHistoryState>((set) => {
+  const initialHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
 
-  addToHistory: (query) => {
-    set((state) => ({
-      history: [...state.history, query],
-    }));
-  },
+  return {
+    history: initialHistory,
 
-  clearHistory: () => {
-    set({ history: [] });
-  },
-}));
+    addToHistory: (query) => {
+      set((state) => {
+        if (!state.history.includes(query)) {
+          const newHistory = [...state.history, query];
+          localStorage.setItem('searchHistory', JSON.stringify(newHistory));
+          return { history: newHistory };
+        }
+        return state;
+      });
+    },
+
+    clearHistory: () => {
+      localStorage.removeItem('searchHistory');
+      set({ history: [] });
+    },
+  };
+});
 
 export default useSearchHistoryStore;

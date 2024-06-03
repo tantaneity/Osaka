@@ -25,6 +25,7 @@ import {
 import useUserStore from "@/store/UserStore";
 import { LoginDialog } from "../dialog/LoginDialog";
 import { useGetPages } from "@/hooks/usePages";
+import InputSearch from "../input/InputSearch";
 
 
 function NavListMenu() {
@@ -225,6 +226,7 @@ export function NavBar() {
         >
           Osaka
         </Typography>
+        <InputSearch/>
         <div className="hidden lg:block">
           <NavList />
         </div>
