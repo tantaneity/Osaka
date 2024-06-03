@@ -6,8 +6,9 @@ class AdminService {
     private ROUTE_PREFIX = 'api/admins';
 
     async getAdminById(adminId: string): Promise<Admin | null> {
-        const admin = (await api.get<Admin>(`${this.ROUTE_PREFIX}/${adminId}`)).data;
-        return admin;
+        const admin = (await api.get<Admin>(`${this.ROUTE_PREFIX}/${adminId}`))
+        if (!admin) return null
+        return admin.data;
     }
 
     async getAdminByUserId(userId: string): Promise<Admin | null> {
