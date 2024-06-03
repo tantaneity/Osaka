@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
         
             
             <div className="flex flex-col w-full">
-                {isAuth && <CartDrawler open={drawerOpen} onClose={closeDrawer} />}
+                <CartDrawler open={drawerOpen} onClose={closeDrawer} />
                 {!isAuth && <LoginDialog open={openLoginDialog} handleOpen={handleOpenLoginDialog}/>}
                 <div className="bg-blue-gray-100 border-b-2 p-4 w-full flex justify-center">
                     
