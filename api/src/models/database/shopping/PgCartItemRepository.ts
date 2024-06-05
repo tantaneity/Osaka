@@ -33,7 +33,7 @@ export class PgCartItemRepository implements ICartItemRepository {
             });
             cartItem = await this.cartItemRepository.save(newCartItem);
         }
-    
+        
         return CartMapper.fromCartItemEntityToCartItem(cartItem);
     }
     

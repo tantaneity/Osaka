@@ -1,6 +1,6 @@
 import { api } from "@/api";
-import { Order } from "@/types/shop/order/Order";
-import { OrderItem } from "@/types/shop/order/OrderItem";
+import { Order, OrderCreate } from "@/types/shop/order/Order";
+import { CreateOrderItem, OrderItem } from "@/types/shop/order/OrderItem";
 import { OrderStatus } from "@/types/shop/order/OrderStatus";
 
 class OrderService {
@@ -15,7 +15,7 @@ class OrderService {
         const orders = (await api.get<Order[]>(`${this.ROUTE_PREFIX}/user/${userId}`)).data;
         return orders;
     }
-    async createOrder(orderData: Order): Promise<Order> {
+    async createOrder(orderData: OrderCreate): Promise<Order> {
         const order = (await api.post<Order>(this.ROUTE_PREFIX, orderData)).data;
         return order;
     }
@@ -70,8 +70,8 @@ class OrderService {
         return orderItem;
     }
 
-    async createOrderItem(orderItemId: string, orderItemData: Partial<OrderItem>): Promise<OrderItem> {
-        const orderItem = (await api.post<OrderItem>(`${this.ROUTE_PREFIX}/${orderItemId}/items`, orderItemData)).data;
+    async createOrderItem(orderId: string,orderItemData: Partial<CreateOrderItem>): Promise<OrderItem> {
+        const orderItem = (await api.post<OrderItem>(`${this.ROUTE_PREFIX}/${orderId}/items`, orderItemData)).data;
         return orderItem;
     }
 

@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import OrderService from '@/services/OrderService';
-import { Order } from '@/types/shop/order/Order';
+import { Order, OrderCreate } from '@/types/shop/order/Order';
 import { OrderStatus } from '@/types/shop/order/OrderStatus';
-import { OrderItem } from '@/types/shop/order/OrderItem';
+import { CreateOrderItem, OrderItem } from '@/types/shop/order/OrderItem';
 
 export const useGetAllOrders = () => useQuery({
     queryKey: ['orders'],
@@ -26,7 +26,7 @@ export const useCreateOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['create-order'],
-        mutationFn: (orderData: Order) => OrderService.createOrder(orderData),
+        mutationFn: (orderData: OrderCreate) => OrderService.createOrder(orderData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders'] });
         }
@@ -116,7 +116,7 @@ export const useCreateOrderItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['create-order-item'],
-        mutationFn: (orderItemData: Partial<OrderItem>) => OrderService.createOrderItem(orderItemData.id || "", orderItemData),
+        mutationFn: (orderItemData: Partial<CreateOrderItem>) => OrderService.createOrderItem(orderItemData.order?.id || "", orderItemData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['order-items'] });
         }

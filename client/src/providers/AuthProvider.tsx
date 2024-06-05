@@ -1,6 +1,7 @@
 import AdminService from "@/services/AdminService";
 import AuthService from "@/services/AuthService";
 import CartService from "@/services/CartService";
+import useCartStore from "@/store/CartStore";
 import useUserStore from "@/store/UserStore";
 import { useEffect, ReactNode } from "react";
 
@@ -10,7 +11,7 @@ interface AuthProviderProps {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const { setIsAuth, setIsLoading, setUser, setIsAdmin, setCart } = useUserStore();
-
+  const {loadCart} = useCartStore()
   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem('accessToken');
@@ -25,6 +26,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           setIsAdmin(!!isAdmin)
           const cart = await CartService.getCartsByUserId(user.id)
           setCart(cart[0])
+          loadCart()
           localStorage.setItem('accessToken', tokens.accessToken);
         } catch (error) {
           setUser(null);

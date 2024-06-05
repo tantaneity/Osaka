@@ -40,11 +40,15 @@ const useCartStore = create<CartState>((set, get) => ({
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
-                cart.items.push({
-                    id: `item_${new Date().getTime()}`,
-                    product: { id: product.id },
-                    quantity,
-                });
+                console.log(product)
+                if (isProduct(product)){
+                    cart.items.push({
+                        id: `item_${new Date().getTime()}`,
+                        product: product,
+                        quantity
+                    });
+                }
+                
             }
 
             cart.dateModified = new Date();
@@ -58,17 +62,17 @@ const useCartStore = create<CartState>((set, get) => ({
         if (isAuth && user && cart) {
             
             const cartItemData = {
-                product: product,
+                product: {id: product.id},
                 quantity,
                 cart: {id: cart.id}
             };
-
+            
             await CartService.createCartItem(cartItemData);
         }
     },
 
     removeItem: async (productId) => {
-        const { user, isAuth } = useUserStore.getState();
+        const { user, isAuth, cart } = useUserStore.getState();
 
         set((state) => {
             if (!state.cart) return { cart: null };
@@ -89,15 +93,15 @@ const useCartStore = create<CartState>((set, get) => ({
         });
 
         if (isAuth && user) {
-            const cartItem = (await CartService.getCartItemsByCartId(get().cart?.id || "")).find((item) => item.product.id === productId);
+            const cartItem = (await CartService.getCartItemsByCartId(cart?.id || "")).find((item) => item.product.id === productId);
             if (cartItem) {
                 await CartService.deleteCartItem(cartItem.id);
             }
         }
     },
     decreaseItem: async (productId) => {
-        const { user, isAuth } = useUserStore.getState();
-
+        const { user, isAuth, cart } = useUserStore.getState();
+        
         set((state) => {
             if (!state.cart) return { cart: null };
 
@@ -124,7 +128,7 @@ const useCartStore = create<CartState>((set, get) => ({
         });
 
         if (isAuth && user) {
-            const cartItem = (await CartService.getCartItemsByCartId(get().cart?.id || "")).find((item) => item.product.id === productId);
+            const cartItem = (await CartService.getCartItemsByCartId(cart?.id || "")).find((item) => item.product.id === productId);
             if (cartItem) {
                 await CartService.updateCartItem(cartItem.id, { quantity: -1 });
             }
@@ -146,16 +150,13 @@ const useCartStore = create<CartState>((set, get) => ({
     },
 
     loadCart: async () => {
-        const { user, isAuth } = useUserStore.getState();
-
+        const { user, isAuth, cart } = useUserStore.getState();
+        
         if (isAuth && user) {
-            const carts = await CartService.getCartsByUserId(user.id);
-            if (carts.length > 0) {
-                set({ cart: carts[0] });
-            }
+            set({ cart: cart });
         } else {
-            const cart = getCartFromLocalStorage();
-            set({ cart });
+            const localCart = getCartFromLocalStorage();
+            set({ cart: localCart });
         }
     },
     getTotalPrice: (products: Product[]) => {

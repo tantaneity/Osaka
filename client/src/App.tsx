@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Footer } from './components/footer/Footer';
 import HomePage from './pages/home/HomePage';
 import { Suspense } from "react"
-import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 import ProductPage from './pages/products/ProductPage';
 import AccountPage from './pages/account/AccountPage';
@@ -12,6 +12,7 @@ import OrderPage from './pages/orders/OrderPage';
 import WishlistPage from './pages/products/WishlistPage';
 import CategoriesPage from './pages/products/CategoriesPage';
 import SearchResults from './pages/products/SearchResults';
+import OrderFormPage from './pages/orders/OrderFormPage';
 
 
 
@@ -48,6 +49,10 @@ function App() {
           {
               path: '/search',
               element: <Suspense children={<SearchResults />} />,
+          },
+          {
+              path: '/shopping_cart/checkout',
+              element: <Suspense children={<OrderFormPage />} />,
           },
 
           

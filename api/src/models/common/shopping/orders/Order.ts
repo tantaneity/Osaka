@@ -10,5 +10,5 @@ export default interface Order {
     orderDeliveredCarrierDate: Date
     orderDeliveredUserDate: Date
     createdAt: Date
-    orderItems: OrderItem[]
+    orderItems?: OrderItem[]
 }

@@ -11,15 +11,15 @@ export class OrderMapper {
     static fromOrderEntityToOrder(orderEntity: OrderEntity): Order {
         return {
             id: orderEntity.id,
-            user: {id: orderEntity.user.id},
+            user: { id: orderEntity.user.id },
             orderStatus: orderEntity.orderStatus,
             orderApprovedAt: orderEntity.orderApprovedAt,
             orderDeliveredCarrierDate: orderEntity.orderDeliveredCarrierDate,
             orderDeliveredUserDate: orderEntity.orderDeliveredUserDate,
             createdAt: orderEntity.createdAt,
-            orderItems: orderEntity.orderItems.map(item => this.fromOrderItemEntityToOrderItem(item)),
-        }
-    }
+            orderItems: orderEntity.orderItems ? orderEntity.orderItems.map(item => this.fromOrderItemEntityToOrderItem(item)) : [],
+        };
+    }    
 
     static fromOrderItemEntityToOrderItem(entity: OrderItemEntity): OrderItem {
         return {

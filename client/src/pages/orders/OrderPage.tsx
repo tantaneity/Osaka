@@ -8,6 +8,7 @@ import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import AuthOnly from '@/access/AuthOnly';
 import { OrderItem } from '@/types/shop/order/OrderItem';
 import { convertToBase64 } from '@/lib/utils';
+import { OrderStatus } from '@/types/shop/order/OrderStatus';
 
 
 const OrderListItem: React.FC<{ item: OrderItem }> = ({ item }) => {
@@ -48,12 +49,12 @@ const OrderPage: React.FC = () => {
     if (isError) {
         return <div className="flex justify-center items-center h-screen"><Alert color="red">Error loading order</Alert></div>;
     }
-    console.log(order?.orderStatus.color)
+    console.log((order?.orderStatus as OrderStatus).color)
     return (
         <div className="flex justify-center items-center h-screen">
             <AuthOnly>
                 <Card className="mx-auto w-full md:w-2/3 lg:w-1/2">
-                    <CardHeader className={`relative h-56 bg-${order?.orderStatus.color}-100`}>
+                    <CardHeader className={`relative h-56 bg-${(order?.orderStatus as OrderStatus).color}-200`}>
                         <Typography variant="h2" color="white" className="absolute bottom-4 left-4">Order Details</Typography>
                     </CardHeader>
                     <CardBody>
@@ -75,7 +76,7 @@ const OrderPage: React.FC = () => {
                             </IconButton>
                         </Typography>
 
-                        <Typography variant="small" className="mb-4">Date: {order?.orderApprovedAt.toLocaleString()}</Typography>
+                        <Typography variant="small" className="mb-4">Date: {order?.createdAt.toLocaleString()}</Typography>
                         <Typography variant="small" className="mb-4">Total Amount: ${order?.orderItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</Typography>
                         <Typography variant="h6" className="mt-4 mb-2">Items:</Typography>
                         <List className="pl-5">

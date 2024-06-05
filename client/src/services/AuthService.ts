@@ -2,6 +2,7 @@ import { api } from "@/api"
 import { UserCreate } from "@/types/users/UserCreate"
 import { AuthResponse } from "@/types/users/auth/AuthResponse"
 import { UserLogin } from "@/types/users/auth/UserLogin"
+
 class AuthService {
     private ROUTE_PREFIX = 'api/users'
 
@@ -9,18 +10,38 @@ class AuthService {
         const response = await api.post<AuthResponse>(`${this.ROUTE_PREFIX}/registration`, { 
             ...user
         })
-        return response.data
+        if (response.status >= 200 && response.status < 300) {
+            return response.data
+        } else {
+            throw new Error('Failed to register user')
+        }
     }
+
     async login(user: UserLogin) {
         const response = await api.post<AuthResponse>(`${this.ROUTE_PREFIX}/login`, { ...user })
-        return response.data
+        if (response.status >= 200 && response.status < 300) {
+            return response.data
+        } else {
+            throw new Error('Failed to log in user')
+        }
     }
+
     async logout() {
-        await api.post<AuthResponse>(`${this.ROUTE_PREFIX}/logout`)
+        const response = await api.post<AuthResponse>(`${this.ROUTE_PREFIX}/logout`)
+        if (response.status >= 200 && response.status < 300) {
+            return response.data
+        } else {
+            throw new Error('Failed to log out user')
+        }
     }
+
     async refresh() {
         const response = await api.get<AuthResponse>(`${this.ROUTE_PREFIX}/refresh`)
-        return response.data
+        if (response.status >= 200 && response.status < 300) {
+            return response.data
+        } else {
+            throw new Error('Failed to refresh token')
+        }
     }
 }
 
