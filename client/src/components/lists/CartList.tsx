@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
-import { Avatar, IconButton, List, ListItem, ListItemPrefix, ListItemSuffix, Typography} from '@material-tailwind/react';
+import { Avatar, IconButton, List, ListItem, ListItemPrefix, ListItemSuffix, Spinner, Typography} from '@material-tailwind/react';
 import { convertToBase64 } from '@/lib/utils';
 import { CartItem, isProduct } from '@/types/shop/cart/CartItem';
 import CartIsEmptyLayer from '../layer/CartIsEmptyLayer';
@@ -30,7 +30,7 @@ const CartList: React.FC = () => {
             <List>
                 {cart?.items && cart.items.length > 0 ? (
                     cart.items.map((cartItem: CartItem) => (
-                        <ListItem ripple={false} className="w-max h-max" key={cartItem.id}>
+                        <ListItem ripple={false} className="w-full" key={cartItem.id}>
                             <CartItemDetail cartItem={cartItem} handleDecrease={handleDecrease} handleIncrease={handleIncrease} handleRemove={handleRemove} />
                         </ListItem>
                     ))
@@ -54,9 +54,7 @@ const CartItemDetail: React.FC<CartItemDetailProps> = ({ cartItem, handleDecreas
 
     if (isLoading || !productData) {
         return (
-            <ListItem ripple={false} className="w-max h-max">
-                <Typography>Loading...</Typography>
-            </ListItem>
+            <Spinner />
         );
     }
 
@@ -70,7 +68,7 @@ const CartItemDetail: React.FC<CartItemDetailProps> = ({ cartItem, handleDecreas
                                 variant='rounded'
                                 alt={productData.name}
                                 src={convertToBase64(productData.images[0]?.data.data)}
-                                className="w-24 h-24"
+                                className="w-24 h-24 object-cover"
                             />
                         </a>
                     </ListItemPrefix>

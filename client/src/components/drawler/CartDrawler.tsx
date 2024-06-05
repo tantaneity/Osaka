@@ -1,10 +1,8 @@
 import React from 'react';
-import { Drawer, Typography, Button, Chip } from "@material-tailwind/react";
-import { useGetCartItemsByCartId, useGetCartsByUserId } from '@/hooks/useCart';
+import { Drawer, Typography, Button } from "@material-tailwind/react";
 import CartList from '../lists/CartList';
-import { isProduct } from '@/types/shop/cart/CartItem';
 import useCartStore from '@/store/CartStore';
-import useUserStore from '@/store/UserStore';
+import { useNavigate } from 'react-router';
 
 interface CartDrawlerProps {
     open: boolean;
@@ -12,10 +10,14 @@ interface CartDrawlerProps {
 }
 
 const CartDrawler: React.FC<CartDrawlerProps> = ({ open, onClose }) => {
-    const { user } = useUserStore();
     const { cart } = useCartStore(); 
     const totalQuantity = cart?.items.reduce((total, item) => total + item.quantity, 0);
+    const navigate = useNavigate()
 
+    const handleBuy = () => {
+        navigate('/shopping_cart/checkout')
+    }
+    
     return (
         <Drawer 
             open={open} 
@@ -43,11 +45,11 @@ const CartDrawler: React.FC<CartDrawlerProps> = ({ open, onClose }) => {
                 </div>
             </div>
             <div className="flex justify-between items-center mt-4">
-                
                 <Button
                     color="black"
                     size="lg"
                     className="w-full"
+                    onClick={handleBuy}
                     disabled={!totalQuantity}
                 >
                     Buy Now

@@ -5,20 +5,19 @@ import { useState, useRef, useEffect } from "react";
 import SuggestionsList from "../lists/SuggestionsList";
 
 
-export default function InputSearch() {
+const InputSearch: React.FC = () => {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
   const { data: products } = useSearchProducts({ name: query, limit: 10 });
   const { history, addToHistory } = useSearchHistoryStore();
   const inputRef = useRef<HTMLInputElement>(null);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setQuery(inputValue);
     setShowSuggestions(!!inputValue.trim());
   };
-
+  
   const handleSearch = () => {
     addToHistory(query);
     setShowSuggestions(false);
@@ -29,7 +28,7 @@ export default function InputSearch() {
     addToHistory(suggestion);
     setShowSuggestions(false);
   };
-
+  
   const suggestions = products ? products : [];
 
   useEffect(() => {
@@ -44,6 +43,7 @@ export default function InputSearch() {
   }, [query, showSuggestions]);
 
   return (
+    
     <div className="relative flex w-full gap-2 md:w-max">
       <Input
         type="search"
@@ -56,15 +56,20 @@ export default function InputSearch() {
         value={query}
         onChange={handleInputChange}
         ref={inputRef} crossOrigin={undefined}      />
-      <Button
-        size="sm"
-        className="!absolute right-1 top-1 rounded bg-blue-gray-400"
-        onClick={handleSearch}
-      >
-        Search
-      </Button>
+        <a href={`/search?name=${query}`} className="!absolute right-1">
+          <Button
+            size="sm"
+            className="!absolute right-1 top-1 rounded bg-blue-gray-400"
+            disabled={!query.trim()}
+            onClick={handleSearch}
+          >
+            Search
+          </Button>
+        </a>
+      
       {showSuggestions && query.trim() && (
         <SuggestionsList
+          inputValue={query}
           history={history}
           suggestions={suggestions}
           onClick={handleSuggestionClick}
@@ -74,3 +79,6 @@ export default function InputSearch() {
     </div>
   );
 }
+
+
+export default InputSearch

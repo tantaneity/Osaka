@@ -81,36 +81,43 @@ export class PgProductRepository implements IProductRepository {
     }
 
     async searchProductsByName(name: string): Promise<Product[]> {
-        const products = await this.productRepository.find({ where: { name: ILike(`%${name}%`) } })
+        const products = await this.productRepository.find({ where: { name: ILike(`%${name}%`) }, relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product'] })
         return products.map(product => ProductMapper.fromProductEntityToProduct(product))
     }
     async searchProducts(params: SearchProductsParams): Promise<Product[]> {
-        const { name, categoryName, minPrice, maxPrice, limit = 10, offset = 0 } = params;
-
-        let whereConditions = {};
-
+        const { name, categoryName, minPrice, maxPrice, limit, offset } = params;
+        const query: any = { 
+            relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product'] 
+        };
+        let whereClause: any = {};
+    
         if (name) {
-            whereConditions = { ...whereConditions, name: ILike(`%${name}%`) };
+            whereClause.name = ILike(`%${name}%`);
         }
         if (categoryName) {
-            whereConditions = { 
-                ...whereConditions, 
-                categories: {
-                    name: ILike(`%${categoryName}%`)
-                } 
-            };
+            whereClause.categories = { name: ILike(`%${categoryName}%`) };
         }
         if (minPrice !== undefined && maxPrice !== undefined) {
-            whereConditions = { ...whereConditions, price: Between(minPrice, maxPrice) };
+            whereClause.price = Between(minPrice, maxPrice);
         }
-
+    
+        query.where = whereClause;
+    
+        // Add ORDER BY clause
+        query.order = { name: 'ASC' }; // Order by product name ascending, you can adjust this as needed
+    
         const products = await this.productRepository.find({
-            where: whereConditions,
+            ...query,
             take: limit,
             skip: offset,
-            relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product']
         });
-
+    
         return products.map(product => ProductMapper.fromProductEntityToProduct(product));
     }
+    
+    
+    
+    
+    
+    
 }

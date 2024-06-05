@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <img src={imageUrl} alt="card-image" className="h-full w-full object-contain" />
         </CardHeader>
         <CardBody>
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-2 flex-basis items-center justify-between">
             <Typography color="blue-gray" className="font-medium">
               {product.name}
             </Typography>

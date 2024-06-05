@@ -3,9 +3,8 @@ import { Dialog, DialogBody, IconButton, Card, CardBody, Typography, Button } fr
 import { XMarkIcon, ShoppingCartIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import { Product } from '@/types/products/Product';
 import ProductCarousel from '../carousel/ProductCarousel';
-import { useCreateCartItem, useGetCartsByUserId } from '@/hooks/useCart';
-import useUserStore from '@/store/UserStore';
 import toast, { Toaster } from 'react-hot-toast';
+import useCartStore from '@/store/CartStore';
 
 interface ProductDialogProps {
   open: boolean;
@@ -14,20 +13,15 @@ interface ProductDialogProps {
 }
 
 const ProductDialog: React.FC<ProductDialogProps> = ({ open, handleOpen, product }) => {
-  const { isAuth, user } = useUserStore();
-  const { mutate: addToCart } = useCreateCartItem();
-  const { data: cartData} = useGetCartsByUserId(user?.id);
-  const cartId = cartData && cartData.length > 0 ? cartData[0].id : null;
+  const { addItem } = useCartStore();
   const handleAddToCart = () => {
-    if (!isAuth){
-      toast.error('Need to login!')
-    }else{
-      if (product && cartId) {
-        addToCart({ product: {id: product.id}, quantity: 1, cart: { id: cartId} });
-      }
+    if (product) {
+        toast.success("Success")
+        addItem(product, 1);
     }
     
   };
+  
   return (
     <Dialog size="xxl" open={open} handler={handleOpen} className="bg-transparent shadow-none backdrop-blur-sm">
       <Toaster/>
