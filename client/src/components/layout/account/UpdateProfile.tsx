@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AccountLayout from '@/components/layout/AccountLayout';
+import AccountLayout from '@/components/layout/account/AccountLayout';
 import { Button, Input } from '@material-tailwind/react';
 import useUserStore from '@/store/UserStore';
 import { useGetUserById, useUpdateUser } from '@/hooks/useGetUsers';

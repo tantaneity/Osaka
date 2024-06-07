@@ -1,8 +1,8 @@
 import React from 'react';
-import AccountLayout from '@/components/layout/AccountLayout';
+import AccountLayout from '@/components/layout/account/AccountLayout';
 import { Typography } from '@material-tailwind/react';
-import OrderStatusCards from '../card/OrderStatusCards';
-import { OrderTable } from '../table/OrdersTabel';
+import OrderStatusCards from '../../card/OrderStatusCards';
+import { OrderTable } from '../../table/OrdersTabel';
 
 const MyOrders: React.FC = () => {
   return (

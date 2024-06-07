@@ -186,7 +186,7 @@ function NavList() {
             {isAuth && isAdmin && <Typography
                 key="Dashboard"
                 as="a"
-                href="/admin"
+                href="/admin/dashboard"
                 variant="small"
                 color="gray"
                 className="font-medium text-blue-gray-500">

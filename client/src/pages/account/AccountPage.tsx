@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import AccountNav from '@/components/nav/AccountNav';
-import MyOrders from '@/components/layout/MyOrders';
-import UpdateProfile from '@/components/layout/UpdateProfile';
-import ChangePassword from '@/components/layout/ChangePassword';
+import MyOrders from '@/components/layout/account/MyOrders';
+import UpdateProfile from '@/components/layout/account/UpdateProfile';
+import ChangePassword from '@/components/layout/account/ChangePassword';
 import AuthOnly from '@/access/AuthOnly';
 import useUserStore from '@/store/UserStore';
 import { Spinner } from '@material-tailwind/react';

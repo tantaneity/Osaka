@@ -13,6 +13,7 @@ import WishlistPage from './pages/products/WishlistPage';
 import CategoriesPage from './pages/products/CategoriesPage';
 import SearchResults from './pages/products/SearchResults';
 import OrderFormPage from './pages/orders/OrderFormPage';
+import DashboardPage from './pages/dashboard/DashboardPage';
 
 
 
@@ -25,6 +26,10 @@ function App() {
           {
               path: '/',
               element: <Suspense children={<HomePage />} />,
+          },
+          {
+              path: '/admin/:navigate',
+              element: <Suspense children={<DashboardPage />} />,
           },
           {
               path: '/drinks/:productId',

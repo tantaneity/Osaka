@@ -10,7 +10,7 @@ import {
 import Chart from "react-apexcharts";
 
 interface StatisticsChartProps {
-  color?: "white" | "blue-gray" | "gray" | "brown" | "deep-orange" | "orange" | "amber" | "yellow" | "lime" | "light-green" | "green" | "teal" | "cyan" | "light-blue" | "blue" | "indigo" | "deep-purple" | "purple" | "pink" | "red";
+  color?: string
   chart: any;
   title: ReactNode;
   description: ReactNode;
@@ -18,15 +18,14 @@ interface StatisticsChartProps {
 }
 
 const StatisticsChart: React.FC<StatisticsChartProps> = ({
-  color = "blue",
   chart,
   title,
   description,
   footer,
 }) => {
   return (
-    <Card className="border border-blue-gray-100 shadow-sm">
-      <CardHeader variant="gradient" color={color} floated={false} shadow={false}>
+    <Card className="border border-blue-gray-200 shadow-sm">
+      <CardHeader variant="gradient" color="blue-gray" floated={false} shadow={false}>
         <Chart {...chart} />
       </CardHeader>
       <CardBody className="px-6 pt-0">
@@ -47,7 +46,7 @@ const StatisticsChart: React.FC<StatisticsChartProps> = ({
 };
 
 StatisticsChart.defaultProps = {
-  color: "blue",
+  color: "blue-gray",
   footer: null,
 };
 
@@ -79,7 +78,5 @@ StatisticsChart.propTypes = {
   description: PropTypes.node.isRequired,
   footer: PropTypes.node,
 };
-
-StatisticsChart.displayName = "/src/widgets/charts/statistics-chart.tsx";
 
 export default StatisticsChart;

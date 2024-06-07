@@ -5,4 +5,5 @@ export default interface Sells {
     product: Product
     price: number
     quantity: number
+    dateSold: Date
 }

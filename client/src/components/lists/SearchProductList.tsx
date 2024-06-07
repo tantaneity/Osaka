@@ -27,9 +27,9 @@ const SearchProductList = ({ query }: SearchProductListProps) => {
           return [...prevProducts, ...uniqueNewProducts];
         });
         setOffset((prevOffset) => prevOffset + newProducts.length);
-        setHasMore(newProducts.length === 10); // Set hasMore to true if we received the maximum number of products
+        setHasMore(newProducts.length === 10);
       } else {
-        setHasMore(false); // No new products means we've reached the end
+        setHasMore(false); 
       }
       setLoading(false);
     }
