@@ -8,4 +8,5 @@ export interface IReviewRepository {
     deleteReview(reviewId: string): Promise<boolean>
     getReviewsByProduct(productId: string): Promise<Review[]>
     getReviewsByUser(userId: string): Promise<Review[]>
+    fetchAdditionalReviewsByProduct(productId: string, skip: number, take: number): Promise<Review[]>
 }

@@ -18,11 +18,38 @@ export class UserService {
     async getUserById(userId: string): Promise<UserInfoDto | null> {
         const user = await this.userRepository.getUserById(userId)
         if (!user) {
-            throw ApiError.unauthorized("User not found")
+            throw ApiError.badRequest("User not found")
         }
         return UserMapper.toUserInfoDto(user)
     }
 
+    async updateUser(userId: string, userData: Partial<UserInfoDto>): Promise<UserInfoDto | null> {
+        const updatedUser = await this.userRepository.updateUser(userId, userData);
+        if (!updatedUser) {
+            throw ApiError.notFound("User not found");
+        }
+        return UserMapper.toUserInfoDto(updatedUser);
+    }
+    
+    async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+        return this.userRepository.changePassword(userId, currentPassword, newPassword);
+    }
+
+    async getUserByEmail(email: string): Promise<UserInfoDto | null> {
+        const user = await this.userRepository.getUserByEmail(email)
+        if (!user) {
+            throw ApiError.badRequest("User not found")
+        }
+        return UserMapper.toUserInfoDto(user)
+    }
+
+    async getUserByUsername(username: string): Promise<UserInfoDto | null> {
+        const user = await this.userRepository.getUserByUsername(username)
+        if (!user) {
+            throw ApiError.badRequest("User not found")
+        }
+        return UserMapper.toUserInfoDto(user)
+    }
     async refresh(refreshToken: string | undefined) {
         if (!refreshToken) {
             throw ApiError.unauthorized("User is unauthorized")
@@ -42,7 +69,7 @@ export class UserService {
 
         const tokens = await this.generateAndStoreTokens(user)
 
-        return { userData, ...tokens }
+        return { user:userData, ...tokens }
     }
 
     async getAllUsers(): Promise<UserInfoDto[]> {
@@ -75,10 +102,6 @@ export class UserService {
 
     async logout(refreshToken: string) {
         return await this.tokenService.deleteToken(refreshToken)
-    }
-
-    async resetPassword(userData: UserResetPasswordDto): Promise<boolean> {
-        return this.userRepository.resetPassword(userData)
     }
 
     async registration(username: string, first_name: string, last_name: string, email: string, password: string) {

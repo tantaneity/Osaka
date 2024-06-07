@@ -8,7 +8,8 @@ export class SellMapper {
             id: entitie.id,
             product: ProductMapper.fromProductEntityToProduct(entitie.product),
             price: entitie.price,
-            quantity: entitie.quantity
+            quantity: entitie.quantity,
+            dateSold: entitie.dateSold
         }
     }
 }

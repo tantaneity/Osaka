@@ -64,7 +64,19 @@ export class ReviewController {
             next(error)
         }
     }
-
+    
+    async fetchAdditionalReviewsByProduct(req: Request, res: Response, next: NextFunction) {
+        try {
+            const productId = req.params.productId as string
+            const skip = parseInt(req.query.skip as string) || 0;
+            const take = parseInt(req.query.take as string) || 20;
+            const reviews = await this.reviewService.fetchAdditionalReviewsByProduct(productId, skip, take);
+            res.json(reviews)
+        } catch (error) {
+            next(error)
+        }
+    }
+    
     async getReviewsByUser(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = req.params.userId as string

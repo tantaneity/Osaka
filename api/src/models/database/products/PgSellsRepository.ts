@@ -53,7 +53,7 @@ export class PgSellsRepository implements ISellsRepository {
     }
 
     async getAllSells(): Promise<Sells[]> {
-        const allSells = await this.sellsRepository.find();
+        const allSells = await this.sellsRepository.find({relations:['product']});
         return allSells.map(sells => SellMapper.fromSellEntityToSell(sells));
     }
 

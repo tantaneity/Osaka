@@ -95,6 +95,20 @@ export class PgReviewRepository implements IReviewRepository {
          }, relations: ['product', 'user'] })
         return reviews.map(review => ReviewMapper.ReviewToReviewEntity(review))
     }
+    async fetchAdditionalReviewsByProduct(productId: string, skip: number, take: number): Promise<Review[]> {
+        const additionalReviews = await this.reviewRepository.find({
+            where: {
+                product: {
+                    id: productId
+                }
+            },
+            skip: skip,
+            take: take,
+            relations: ['product', 'user']
+        });
+        return additionalReviews.map(review => ReviewMapper.ReviewToReviewEntity(review));
+    }
+    
 
     async getReviewsByUser(userId: string): Promise<Review[]> {
         const reviews = await this.reviewRepository.find({

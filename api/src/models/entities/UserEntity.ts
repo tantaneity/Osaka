@@ -3,6 +3,8 @@ import {ReviewEntity} from './ReviewEntity'
 import { AdminEntity } from './AdminEntity'
 import { CartEntity } from './CartEntity'
 import { OrderEntity } from './OrderEntity'
+import { PageEntity } from './PageEntity'
+import { WishlistItemEntity } from './WishlistItemEntity'
 
 
 @Entity({
@@ -46,6 +48,12 @@ export class UserEntity extends BaseEntity {
     @OneToMany(() => CartEntity, cart => cart.user)
     carts: CartEntity[];
 
-    @OneToMany(() => OrderEntity, order => order.user) // Добавлена ассоциация с OrderEntity
+    @OneToMany(() => OrderEntity, order => order.user) 
     orders: OrderEntity[];
+
+    @OneToMany(() => PageEntity, page => page.user)
+    pages: PageEntity[]
+
+    @OneToMany(() => WishlistItemEntity, wishlistItem => wishlistItem.user)
+    wishlistItems: WishlistItemEntity[];
 }

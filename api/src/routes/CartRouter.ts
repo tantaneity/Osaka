@@ -19,6 +19,9 @@ const CartRouter = Router();
 CartRouter.get('/items', async (req: Request, res: Response, next: NextFunction) => {
     await cartItemController.getAllCartItems(req, res, next);
 });
+CartRouter.get('/user/items/:cartId', async (req: Request, res: Response, next: NextFunction) => {
+    await cartItemController.getCartItemsByCartId(req, res, next);
+});
 
 CartRouter.get('/items/:id', async (req: Request, res: Response, next: NextFunction) => {
     await cartItemController.getCartItemById(req, res, next);
@@ -42,6 +45,10 @@ CartRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 CartRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     await cartController.getCartById(req, res, next);
+});
+
+CartRouter.get('/user/:id', async (req: Request, res: Response, next: NextFunction) => {
+    await cartController.getCartsByUserId(req, res, next);
 });
 
 CartRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {

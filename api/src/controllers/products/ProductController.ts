@@ -5,6 +5,7 @@ import { ApiError } from '../../errors/api/ApiError'
 import { ProductCreateDto, ProductUpdateDto } from '../../models/dtos/product/ProductDto'
 import { CategoryService } from '../../services/CategoryService'
 import { PgCategoryRepository } from '../../models/database/products/PgCategoryRepository'
+import { SearchProductsParams } from '../../utils/data/Params'
 
 export class ProductController {
     private readonly categoryService: CategoryService
@@ -99,6 +100,24 @@ export class ProductController {
             res.json(products)
         } catch (error) {
             next(error)
+        }
+    }
+
+    async searchProducts(req: Request, res: Response, next: NextFunction) {
+        try {
+            const params: SearchProductsParams = {
+                name: req.query.name as string,
+                categoryName: req.query.categoryName as string,
+                minPrice: req.query.minPrice ? parseFloat(req.query.minPrice as string) : undefined,
+                maxPrice: req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined,
+                limit: req.query.limit ? parseInt(req.query.limit as string) : undefined,
+                offset: req.query.offset ? parseInt(req.query.offset as string) : undefined
+            };
+
+            const products = await this.productService.searchProducts(params);
+            res.json(products);
+        } catch (error) {
+            next(error);
         }
     }
 }

@@ -14,6 +14,9 @@ export class CategoryEntity {
     @Column()
     description: string
 
+    @Column({ type: "bytea", nullable: true })
+    image?: Buffer
+
     @ManyToOne(() => CategoryEntity, category => category.subcategories)
     parentCategory?: CategoryEntity
 

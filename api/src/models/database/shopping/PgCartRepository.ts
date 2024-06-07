@@ -14,7 +14,7 @@ export class PgCartRepository implements ICartRepository {
     }
 
     async getCartById(cartId: string): Promise<Cart | null> {
-        const cart = await this.cartRepository.findOne({ where: { id: cartId } });
+        const cart = await this.cartRepository.findOne({ where: { id: cartId }, relations: ['items', 'user']});
         return cart ? CartMapper.fromCartEntityToCart(cart) : null;
     }
 
@@ -31,7 +31,7 @@ export class PgCartRepository implements ICartRepository {
     }
 
     async updateCart(cartId: string, cartData: Partial<Cart>): Promise<Cart | null> {
-        const cart = await this.cartRepository.findOne({ where: { id: cartId } });
+        const cart = await this.cartRepository.findOne({ where: { id: cartId }, relations: ['items', 'user'] });
         if (!cart) {
             throw ApiError.notFound('Cart not found');
         }
@@ -50,12 +50,12 @@ export class PgCartRepository implements ICartRepository {
     }
 
     async getAllCarts(): Promise<Cart[]> {
-        const carts = await this.cartRepository.find();
+        const carts = await this.cartRepository.find({relations: ['items', 'user']});
         return carts.map(cart => CartMapper.fromCartEntityToCart(cart));
     }
 
     async getCartsByUserId(userId: string): Promise<Cart[]> {
-        const carts = await this.cartRepository.find({ where: { user: { id: userId} } });
+        const carts = await this.cartRepository.find({ where: { user: { id: userId} }, relations: ['items', 'user', 'items.cart', 'user.carts', 'items.product', 'items.product.images', 'items.product.images.product'] });
         return carts.map(cart => CartMapper.fromCartEntityToCart(cart));
     }
 }

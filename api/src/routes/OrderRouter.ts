@@ -76,4 +76,8 @@ OrderRouter.delete('/statuses/:id', async (req, res, next) => {
     await orderController.deleteOrderStatus(req, res, next);
 });
 
+OrderRouter.get('/user/:userId', async (req, res, next) => {
+    await orderController.getOrdersByUserId(req, res, next);
+});
+
 export default OrderRouter;

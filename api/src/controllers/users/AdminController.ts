@@ -29,6 +29,19 @@ export class AdminController {
         }
     }
 
+    async getAdminByUserId(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userId = req.params.userId as string;
+            const admin = await this.adminService.getAdminByUserId(userId);
+            if (!admin) {
+                return next(ApiError.badRequest('Admin not found'));
+            }
+            res.json(admin);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getAllAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const admins = await this.adminService.getAllAdmins();

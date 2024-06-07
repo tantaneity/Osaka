@@ -4,11 +4,11 @@ import OrderStatus from "./OrderStatus"
 
 export default interface Order {
     id: string
-    user: User
+    user: User | {id: string}
     orderStatus: OrderStatus
     orderApprovedAt: Date
     orderDeliveredCarrierDate: Date
     orderDeliveredUserDate: Date
     createdAt: Date
-    orderItems: OrderItem[]
+    orderItems?: OrderItem[]
 }

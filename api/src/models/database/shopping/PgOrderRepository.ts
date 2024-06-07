@@ -18,27 +18,42 @@ export class PgOrderRepository implements IOrderRepository {
     }
 
     async getOrderById(orderId: string): Promise<Order | null> {
-        const order = await this.orderRepository.findOne({where: {id: orderId}});
+        const order = await this.orderRepository.findOne({where: {id: orderId}, relations: ['user', 'orderStatus', 'orderItems', 'orderItems.product', 'orderItems.order']});
         return order ? OrderMapper.fromOrderEntityToOrder(order) : null;
     }
-
+    async getOrdersByUserId(userId: string): Promise<Order[]> {
+        const orders = await this.orderRepository.find({ where: { user: { id: userId } }, relations: ['user', 'orderStatus', 'orderItems', 'orderItems.product', 'orderItems.order'] });
+        return orders.map(order => OrderMapper.fromOrderEntityToOrder(order));
+    }
     async createOrder(orderData: Order): Promise<Order> {
-        const {user, orderStatus, orderApprovedAt, orderDeliveredCarrierDate, orderDeliveredUserDate, createdAt, orderItems} = orderData;
+        const { user, orderStatus, orderApprovedAt, orderDeliveredCarrierDate, orderDeliveredUserDate, createdAt, orderItems } = orderData;
+        const newUser = { id: user.id };
+        const newOrderStatus = { id: orderStatus.id };
+    
+        let newOrderItems;
+        if (orderItems) {
+            newOrderItems = orderItems.map(orderItem => ({
+                ...orderItem,
+                product: { id: orderItem.product.id },
+                order: { id: orderItem.order.id }
+            }));
+        }
+    
         const newOrder = this.orderRepository.create({
-            user: {
-                id: user.id
-            },
-            orderStatus: {
-                id: orderStatus.id
-            },
+            user: newUser,
+            orderStatus: newOrderStatus,
             orderApprovedAt: orderApprovedAt,
             orderDeliveredCarrierDate: orderDeliveredCarrierDate,
             orderDeliveredUserDate: orderDeliveredUserDate,
-            createdAt: createdAt
+            createdAt: createdAt,
+            orderItems: newOrderItems
         });
+    
         const savedOrder = await this.orderRepository.save(newOrder);
         return OrderMapper.fromOrderEntityToOrder(savedOrder);
     }
+    
+    
 
     async updateOrder(orderId: string, orderData: Partial<Order>): Promise<Order | null> {
         let order = await this.orderRepository.findOne({ where: {id: orderId}});
@@ -56,7 +71,7 @@ export class PgOrderRepository implements IOrderRepository {
     }
 
     async getAllOrders(): Promise<Order[]> {
-        const orders = await this.orderRepository.find();
+        const orders = await this.orderRepository.find({ relations: ['user', 'orderStatus', 'orderItems', 'orderItems.product', 'orderItems.order']});
         return orders.map(order => OrderMapper.fromOrderEntityToOrder(order));
     }
 

@@ -7,7 +7,7 @@ export class AdminMapper {
     static fromAdminEntityToAdmin(entity: AdminEntity): Admin {
         return {
             id: entity.id,
-            user: UserMapper.fromUserEntityToUser(entity.user),
+            user: UserMapper.fromUserEntityToUserInfoDto(entity.user),
             permissions: entity.permissions.map(permission => PermissionMapper.fromPermissionEntityToPermission(permission)),
         }
     }

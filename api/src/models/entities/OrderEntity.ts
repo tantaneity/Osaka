@@ -16,7 +16,7 @@ export class OrderEntity {
     @JoinColumn()
     orderStatus: OrderStatusEntity;
 
-    @Column()
+    @Column({ nullable: true})
     orderApprovedAt: Date
 
     @Column({ nullable: true})

@@ -8,6 +8,15 @@ const productService = new ProductService(productRepository)
 const productController = new ProductController(productService)
 const ProductRouter = Router()
 
+
+ProductRouter.get('/search', async (req: Request, res: Response, next: NextFunction) => {
+    if (req.query.name) {
+        await productController.searchProductsByName(req, res, next);
+    } else {
+        await productController.searchProducts(req, res, next);
+    }
+});
+
 ProductRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     await productController.getAllProducts(req, res, next)
 })
@@ -43,13 +52,9 @@ ProductRouter.get('/category/:categoryId', async (req: Request, res: Response, n
     }
 })
 
-ProductRouter.get('/search/price', async (req: Request, res: Response, next: NextFunction) => {
-    await productController.getProductsByPriceRange(req, res, next)
-})
 
-ProductRouter.get('/search/name', async (req: Request, res: Response, next: NextFunction) => {
-    await productController.searchProductsByName(req, res, next)
-})
+
+
 
 
 export default ProductRouter

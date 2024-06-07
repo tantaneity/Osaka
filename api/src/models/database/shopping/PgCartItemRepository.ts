@@ -14,27 +14,32 @@ export class PgCartItemRepository implements ICartItemRepository {
     }
 
     async getCartItemById(cartItemId: string): Promise<CartItem | null> {
-        const cartItem = await this.cartItemRepository.findOne({ where: { id: cartItemId } });
+        const cartItem = await this.cartItemRepository.findOne({ where: { id: cartItemId }, relations: ['cart', 'product'] });
         return cartItem ? CartMapper.fromCartItemEntityToCartItem(cartItem) : null;
     }
 
     async createCartItem(cartItemData: CartItem): Promise<CartItem> {
-        const {cart, product, quantity} = cartItemData
-        const newCartItem = this.cartItemRepository.create({
-            cart: {
-                id: cart.id
-            }, 
-            product: {
-                id: product.id,
-            }, 
-            quantity
-        });
-        const savedCartItem = await this.cartItemRepository.save(newCartItem);
-        return CartMapper.fromCartItemEntityToCartItem(savedCartItem);
+        const { cart, product, quantity } = cartItemData;
+        let cartItem = await this.cartItemRepository.findOne({ where: { cart: { id: cart.id }, product: { id: product.id } }, relations: ['cart', 'product'] });
+    
+        if (cartItem) {
+            cartItem.quantity += quantity;
+            cartItem = await this.cartItemRepository.save(cartItem);
+        } else {
+            const newCartItem = this.cartItemRepository.create({
+                cart: { id: cart.id },
+                product: { id: product.id },
+                quantity
+            });
+            cartItem = await this.cartItemRepository.save(newCartItem);
+        }
+        
+        return CartMapper.fromCartItemEntityToCartItem(cartItem);
     }
+    
 
     async updateCartItem(cartItemId: string, cartItemData: Partial<CartItem>): Promise<CartItem | null> {
-        const cartItem = await this.cartItemRepository.findOne({ where: { id: cartItemId } });
+        const cartItem = await this.cartItemRepository.findOne({ where: { id: cartItemId }, relations: ['cart', 'product'] });
         if (!cartItem) {
             throw ApiError.notFound('CartItem not found');
         }
@@ -44,7 +49,7 @@ export class PgCartItemRepository implements ICartItemRepository {
     }
 
     async deleteCartItem(cartItemId: string): Promise<boolean> {
-        const cartItem = await this.cartItemRepository.findOne({ where: { id: cartItemId } });
+        const cartItem = await this.cartItemRepository.findOne({ where: { id: cartItemId }, relations: ['cart', 'product'] });
         if (!cartItem) {
             throw ApiError.notFound('CartItem not found');
         }
@@ -53,14 +58,14 @@ export class PgCartItemRepository implements ICartItemRepository {
     }
 
     async getAllCartItems(): Promise<CartItem[]> {
-        const cartItems = await this.cartItemRepository.find();
+        const cartItems = await this.cartItemRepository.find({relations: ['cart', 'product']});
         return cartItems.map(cartItem => CartMapper.fromCartItemEntityToCartItem(cartItem));
     }
 
     async getCartItemsByCartId(cartId: string): Promise<CartItem[]> {
         const cartItems = await this.cartItemRepository.find({ where: { cart: {
             id: cartId
-        } } });
+        } }, relations: ['cart', 'product', 'product.images', 'product.images.product'] });
         return cartItems.map(cartItem => CartMapper.fromCartItemEntityToCartItem(cartItem));
     }
 }

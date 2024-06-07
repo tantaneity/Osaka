@@ -11,7 +11,7 @@ const adminService = new AdminService(adminRepository);
 const adminController = new AdminController(adminService);
 const AdminRouter = Router();
 
-AdminRouter.use(adminMiddleware);
+// AdminRouter.use(adminMiddleware);
 
 AdminRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     await adminController.getAllAdmins(req, res, next);
@@ -20,7 +20,9 @@ AdminRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
 AdminRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     await adminController.getAdminById(req, res, next);
 });
-
+AdminRouter.get('/user/:userId', async (req: Request, res: Response, next: NextFunction) => {
+    await adminController.getAdminByUserId(req, res, next);
+});
 AdminRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     await adminController.createAdmin(req, res, next);
 });
