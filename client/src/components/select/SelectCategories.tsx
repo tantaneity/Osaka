@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useGetAllCategories } from "@/hooks/useCategory";
 import { Select, Option  } from "@material-tailwind/react";
 import { Category } from "@/types/category/Category";

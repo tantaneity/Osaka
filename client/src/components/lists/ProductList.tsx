@@ -1,9 +1,9 @@
-import { useGetProducts } from '@/hooks/useProducts';
+import { useGetProducts, useSearchProducts } from '@/hooks/useProducts';
 import ProductCard from '../card/ProductCard';
 import { CardPlacehoderSkeleton } from '../skeleton/CardSkeleton';
 
 function ProductList() {
-    const {data, isLoading, isError } = useGetProducts();
+    const {data, isLoading, isError } = useSearchProducts({name:'', categoryName: ''});
     
     if (isLoading) return <div><CardPlacehoderSkeleton/></div>;
     if (isError) return <div>Error fetching data</div>;

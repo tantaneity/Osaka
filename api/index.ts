@@ -18,10 +18,13 @@ import HomePageBannerRouter from './src/routes/HomePageBannerRouter'
 import NewsRouter from './src/routes/NewsRouter'
 import WishlistItemRouter from './src/routes/WishlistItemRouter'
 import ImageRouter from './src/routes/ImageRouter'
+import bodyParser from 'body-parser'
 const app = express()
 const PORT = process.env.PORT || 5000
 
-app.use(express.json())
+app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}))
+
 app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
