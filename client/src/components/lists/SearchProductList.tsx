@@ -7,15 +7,16 @@ import { Card, Spinner } from "@material-tailwind/react";
 
 type SearchProductListProps = {
   query: string;
+  category?: string;
 };
 
-const SearchProductList = ({ query }: SearchProductListProps) => {
+const SearchProductList = ({ query, category }: SearchProductListProps) => {
   const [offset, setOffset] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const { data: newProducts } = useSearchProducts({ name: query, limit: 10, offset });
+  const { data: newProducts } = useSearchProducts({ name: query, categoryName:category, limit: 10, offset });
 
   useEffect(() => {
     if (newProducts && loading) {
@@ -46,7 +47,7 @@ const SearchProductList = ({ query }: SearchProductListProps) => {
     setOffset(0);
     setHasMore(true);
     setLoading(true);
-  }, [query]);
+  }, [query, category]);
 
   return (
     <Card>
