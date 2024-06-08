@@ -18,7 +18,7 @@ interface ProductDialogProps {
 const ProductDialog: React.FC<ProductDialogProps> = ({ open, handleOpen, product }) => {
   const { addItem } = useCartStore();
   const [openDeletionDialog, setOpenDeletionDialog] = useState(false);
-  const { isAdmin, isAuth } = useUserStore();
+  const { isAdmin } = useUserStore();
   const deleteProductMutation = useDeleteProduct();
   const handleAddToCart = () => {
     if (product) {

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Card, Typography, Button, CardHeader, Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
+import { Card, Typography, CardHeader, Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { Category } from '@/types/category/Category';
 import { Link } from 'react-router-dom';
 import { convertToBase64 } from '@/lib/utils';
+import SubcategoryLinks from '../links/SubcategoryLinks';
+import MoreButton from '../button/MoreButton';
 
 interface CategoryCardProps {
   category: Category;
@@ -25,9 +27,10 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, subcategories, on
   const displayedSubcategories = showAllSubcategories ? subcategories : subcategories.slice(0, 3);
 
   const imageUrl =
-  category.image && category.image?.data
-      ? convertToBase64(category.image?.data)
-      : (category.base64Url || 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg');
+    category.image && category.image?.data
+    ? convertToBase64(category.image?.data)
+    : (category.base64Url || 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg');
+  
   return (
     <Card className="flex flex-col items-center p-4 mb-5 mt-5 w-full bg-blue-gray-100" onClick={onClick}>
       <Link to={`/search/?category=${category.name.toLowerCase().replace(/\s+/g, "-")}`}>
@@ -56,20 +59,10 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, subcategories, on
         </AccordionBody>
       </Accordion>
 
-      <div className="mb-4 w-full">
-        <Card className='h-12 bg-blue-gray-50'>
-          {displayedSubcategories.map((subcategory) => (
-            <Link key={subcategory.id} to={`/search/?category=${subcategory.name.toLowerCase().replace(/\s+/g, "-")}`} className="block p-4 text-sm text-black-200">
-              {subcategory.name}
-            </Link>
-          ))}
-        </Card>
-      </div>
+      <SubcategoryLinks subcategories={displayedSubcategories} />
 
       {subcategories.length > 3 && (
-        <Button color="blue-gray" size="sm" variant='text' onClick={handleToggleSubcategories}>
-          {showAllSubcategories ? 'Show Less' : 'More'}
-        </Button>
+        <MoreButton onClick={handleToggleSubcategories} showAllSubcategories={showAllSubcategories} />
       )}
     </Card>
   );
