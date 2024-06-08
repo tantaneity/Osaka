@@ -81,11 +81,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ searchTerm }) => {
             </AccordionBody>
           </Accordion>
         ) : (
-          <ListItem key={index}>
+          <a href={`${item.title.toLowerCase().replace(" ", "-")}`} className="text-black-500">
+            <ListItem key={index}>
             <ListItemPrefix>{item.icon}</ListItemPrefix>
-            <a href={`${item.title.toLowerCase().replace(" ", "-")}`} className="text-black-500">
+            
               {item.title}
-            </a>
+            
             {item.title === "Inbox" && (
               <ListItemSuffix>
                 <Chip
@@ -98,6 +99,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ searchTerm }) => {
               </ListItemSuffix>
             )}
           </ListItem>
+          </a>
+          
         )
       ))}
       <hr className="my-2 border-blue-gray-50" />
