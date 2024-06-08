@@ -29,3 +29,14 @@ export const useSearchProducts = (params: { name?: string; categoryName?: string
     queryFn: () => ProductService.searchProducts(params),
     enabled: Object.keys(params).length > 0,
 });
+
+export const useDeleteProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationKey: ['delete-product'],
+        mutationFn: (productId: string) => ProductService.deleteProduct(productId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products"] });
+        }
+    });
+}

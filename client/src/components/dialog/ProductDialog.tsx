@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogBody, IconButton, Card, CardBody, Typography, Button } from '@material-tailwind/react';
-import { XMarkIcon, ShoppingCartIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
+import { XMarkIcon, ShoppingCartIcon, InformationCircleIcon, TrashIcon } from '@heroicons/react/24/solid'; // Добавлен иконка мусорной корзины
 import { Product } from '@/types/products/Product';
 import ProductCarousel from '../carousel/ProductCarousel';
 import toast, { Toaster } from 'react-hot-toast';
 import useCartStore from '@/store/CartStore';
+import useUserStore from '@/store/UserStore';
+import { useDeleteProduct } from '@/hooks/useProducts';
+import DeleteProductDialog from './DeleteProductDialog';
 
 interface ProductDialogProps {
   open: boolean;
@@ -14,17 +17,30 @@ interface ProductDialogProps {
 
 const ProductDialog: React.FC<ProductDialogProps> = ({ open, handleOpen, product }) => {
   const { addItem } = useCartStore();
+  const [openDeletionDialog, setOpenDeletionDialog] = useState(false);
+  const { isAdmin, isAuth } = useUserStore();
+  const deleteProductMutation = useDeleteProduct();
   const handleAddToCart = () => {
     if (product) {
-        toast.success("Success")
-        addItem(product, 1);
+      toast.success("Success")
+      addItem(product, 1);
     }
-    
   };
-  
+  const handleOpenDialog = () => {
+    setOpenDeletionDialog(true);
+  };
+  const handleDeleteProduct = async () => {
+    await deleteProductMutation.mutateAsync(product.id);
+  };
+
   return (
     <Dialog size="xxl" open={open} handler={handleOpen} className="bg-transparent shadow-none backdrop-blur-sm">
-      <Toaster/>
+      <Toaster />
+      <DeleteProductDialog
+        open={openDeletionDialog}
+        setOpen={setOpenDeletionDialog}
+        onDeleteProduct={handleDeleteProduct}
+      />
       <DialogBody className="overflow-y-scroll no-scrollbar">
         <Card className="max-w-xl mx-auto">
           <IconButton className='h-6 w-6 p-5 m-2' size="sm" variant='text' onClick={handleOpen}>
@@ -52,6 +68,11 @@ const ProductDialog: React.FC<ProductDialogProps> = ({ open, handleOpen, product
                   More
                 </Button>
               </a>
+              {isAdmin && (
+                  <IconButton className='h-6 w-6 p-5 m-2' size="sm" variant='text' onClick={handleOpenDialog}>
+                    <TrashIcon color='red' className='h-6 w-6' />
+                  </IconButton>
+              )}
             </div>
           </CardBody>
         </Card>
