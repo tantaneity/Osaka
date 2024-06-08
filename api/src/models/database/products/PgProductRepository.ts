@@ -8,6 +8,7 @@ import { ProductMapper } from '../../mappers/ProductMapper'
 import { ProductCreateDto, ProductUpdateDto } from '../../dtos/product/ProductDto'
 import Category from '../../common/products/Category'
 import { SearchProductsParams } from '../../../utils/data/Params'
+import { ImageEntity } from '../../entities/ImageEntity'
 
 
 
@@ -15,9 +16,11 @@ import { SearchProductsParams } from '../../../utils/data/Params'
 export class PgProductRepository implements IProductRepository {
     
     private readonly productRepository: Repository<ProductEntity>
+    private readonly imageRepository: Repository<ImageEntity>
 
     constructor() {
         this.productRepository = AppDataSource.getRepository(ProductEntity)
+        this.imageRepository = AppDataSource.getRepository(ImageEntity)
     }
 
     async getProductById(productId: string): Promise<Product | null> {
@@ -46,23 +49,24 @@ export class PgProductRepository implements IProductRepository {
 
     async deleteProduct(productId: string): Promise<boolean> {
         try {
-            const product = await this.productRepository.findOne({ where: { id: productId } })
-            if (!product) throw ApiError.notFound('Product not found')
-
-            await this.productRepository.remove(product)
-            return true
+            const product = await this.productRepository.findOne({ where: { id: productId } });
+            if (!product) throw ApiError.notFound('Product not found');
+            await this.imageRepository.delete({ product: product });
+    
+            await this.productRepository.remove(product);
+            
+            return true;
         } catch (error: any) {
-            throw ApiError.internalServerError('Failed to delete product', error)
+            throw ApiError.internalServerError('Failed to delete product', error);
         }
     }
+    
 
     async getAllProducts(): Promise<Product[]> {
         const products = await this.productRepository.find({
             relations: ['images', 'categories', 'reviews', 'reviews.user', 'reviews.product', 'images.product']
         })
 
-
-        console.log(products.map(product => product.images))
         return products.map(product => ProductMapper.fromProductEntityToProduct(product))
     }
 
