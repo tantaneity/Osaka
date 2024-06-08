@@ -1,4 +1,5 @@
 import AnalyticsDashboardLayout from '@/components/layout/dashboard/analytics/AnalyticsLayout';
+import CategoryDashboardLayout from '@/components/layout/dashboard/category/CategoryLayout';
 import ProductDashboardLayout from '@/components/layout/dashboard/products/ProductLayout';
 import SidebarNav from '@/components/nav/SidebarNav/SidebarNav';
 import useUserStore from '@/store/UserStore';
@@ -20,6 +21,8 @@ const DashboardPage: React.FC = () => {
                 return <AnalyticsDashboardLayout />
             case 'products':
                 return <ProductDashboardLayout />
+            case 'category':
+                return <CategoryDashboardLayout />
             default:
                 return <AnalyticsDashboardLayout />
 
