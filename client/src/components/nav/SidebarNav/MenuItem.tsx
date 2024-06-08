@@ -22,7 +22,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ searchTerm }) => {
     {
       title: "E-Commerce",
       icon: <ShoppingBagIcon className="h-5 w-5" />,
-      children: ["Orders", "Products", "New Product"],
+      children: ["Orders", "Products", "Category", "News"],
     },
     { title: "Inbox", icon: <InboxIcon className="h-5 w-5" />, children: [] },
     { title: "Log Out", icon: <PowerIcon className="h-5 w-5" />, children: [] },
@@ -65,14 +65,17 @@ const MenuItem: React.FC<MenuItemProps> = ({ searchTerm }) => {
             <AccordionBody className="py-1">
               <List className="p-0">
                 {item.children.map((child, childIndex) => (
-                  <ListItem key={childIndex}>
+                  <a href={`${child.toLowerCase().replace(" ", "-")}`} className="text-indigo-200">
+                    <ListItem key={childIndex}>
                     <ListItemPrefix>
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>
-                    <a href={`${child.toLowerCase().replace(" ", "-")}`} className="text-indigo-200">
+                    
                       {child}
-                    </a>
+                    
                   </ListItem>
+                  </a>
+                  
                 ))}
               </List>
             </AccordionBody>
