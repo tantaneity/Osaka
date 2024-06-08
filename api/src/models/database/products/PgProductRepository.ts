@@ -9,6 +9,8 @@ import { ProductCreateDto, ProductUpdateDto } from '../../dtos/product/ProductDt
 import Category from '../../common/products/Category'
 import { SearchProductsParams } from '../../../utils/data/Params'
 import { ImageEntity } from '../../entities/ImageEntity'
+import { CartEntity } from '../../entities/CartEntity'
+import { CartItemEntity } from '../../entities/CartItemEntity'
 
 
 
@@ -17,10 +19,12 @@ export class PgProductRepository implements IProductRepository {
     
     private readonly productRepository: Repository<ProductEntity>
     private readonly imageRepository: Repository<ImageEntity>
+    private readonly cartItemRepository: Repository<CartItemEntity>
 
     constructor() {
         this.productRepository = AppDataSource.getRepository(ProductEntity)
         this.imageRepository = AppDataSource.getRepository(ImageEntity)
+        this.cartItemRepository = AppDataSource.getRepository(CartItemEntity)
     }
 
     async getProductById(productId: string): Promise<Product | null> {
@@ -52,7 +56,7 @@ export class PgProductRepository implements IProductRepository {
             const product = await this.productRepository.findOne({ where: { id: productId } });
             if (!product) throw ApiError.notFound('Product not found');
             await this.imageRepository.delete({ product: product });
-    
+            await this.cartItemRepository.delete({ product: product })
             await this.productRepository.remove(product);
             
             return true;
