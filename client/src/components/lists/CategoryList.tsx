@@ -22,7 +22,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ onCategoryClick }) => {
   const parentCategories = categories?.filter(category => !category.parentCategory);
 
   return (
-    <div className="grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-screen h-auto">
+    <div className="grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 w-full h-auto">
       {parentCategories?.map(category => (
         <CategoryWithSubcategories key={category.id} category={category} onCategoryClick={onCategoryClick} />
       ))}
