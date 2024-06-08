@@ -4,7 +4,7 @@ import { useGetAllCategories, useGetSubcategories } from '@/hooks/useCategory';
 import CategoryCard from '@/components/card/CategoryCard';
 import { Spinner } from '@material-tailwind/react';
 
-interface CategoryListProps {
+export interface CategoryListProps {
   onCategoryClick?: (category: Category) => void;
 }
 
@@ -30,7 +30,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ onCategoryClick }) => {
   );
 };
 
-const CategoryWithSubcategories: React.FC<{ category: Category, onCategoryClick?: (category: Category) => void }> = ({ category, onCategoryClick }) => {
+export const CategoryWithSubcategories: React.FC<{ category: Category, onCategoryClick?: (category: Category) => void }> = ({ category, onCategoryClick }) => {
   const { data: subcategories, isLoading, error } = useGetSubcategories(category.id);
 
   if (isLoading) {

@@ -24,12 +24,16 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, subcategories, on
 
   const displayedSubcategories = showAllSubcategories ? subcategories : subcategories.slice(0, 3);
 
+  const imageUrl =
+  category.image && category.image?.data
+      ? convertToBase64(category.image?.data)
+      : (category.base64Url || 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg');
   return (
-    <Card className="flex flex-col items-center p-4 mb-5 mt-5 w-full" onClick={onClick}>
+    <Card className="flex flex-col items-center p-4 mb-5 mt-5 w-full bg-blue-gray-100" onClick={onClick}>
       <Link to={`/search/?category=${category.name.toLowerCase().replace(/\s+/g, "-")}`}>
         <CardHeader className="h-48">
           <img
-            src={convertToBase64(category.image.data)}
+            src={imageUrl}
             alt={category.name}
             className="w-full h-full object-cover object-center"
             style={{ maxWidth: '100%', maxHeight: '100%' }}
@@ -53,7 +57,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, subcategories, on
       </Accordion>
 
       <div className="mb-4 w-full">
-        <Card className='h-12 bg-indigo-50'>
+        <Card className='h-12 bg-blue-gray-50'>
           {displayedSubcategories.map((subcategory) => (
             <Link key={subcategory.id} to={`/search/?category=${subcategory.name.toLowerCase().replace(/\s+/g, "-")}`} className="block p-4 text-sm text-black-200">
               {subcategory.name}

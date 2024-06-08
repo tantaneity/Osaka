@@ -17,6 +17,9 @@ export class CategoryEntity {
     @Column({ type: "bytea", nullable: true })
     image?: Buffer
 
+    @Column({ type: "text", nullable: true })
+    base64Url?: string
+
     @ManyToOne(() => CategoryEntity, category => category.subcategories)
     parentCategory?: CategoryEntity
 

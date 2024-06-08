@@ -7,6 +7,7 @@ export class CategoryMapper {
             id: entity.id,
             name: entity.name,
             image: entity.image,
+            base64Url: entity.base64Url,
             description: entity.description,
             parentCategory: entity.parentCategory
         }
