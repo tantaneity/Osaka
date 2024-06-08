@@ -7,10 +7,12 @@ import { SelectCategories } from '../select/SelectCategories';
 import { useCreateImage } from '@/hooks/useImage';
 import { useCreateProduct } from '@/hooks/useProducts';
 import { fileToDataURL } from '@/lib/utils';
+import { Product } from '@/types/products/Product';
 
 interface AddProductDialogProps {
   open: boolean;
   handleOpen: () => void;
+  onAddProduct: (newProduct: Product) => void;
 }
 
 interface NewProduct {
@@ -22,7 +24,7 @@ interface NewProduct {
   imageUrls: string[]
 }
 
-const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen }) => {
+const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen, onAddProduct }) => {
   const [newProduct, setNewProduct] = useState<NewProduct>({
     name: '',
     description: '',
@@ -39,20 +41,30 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen })
     setSelectedCategory(categoryId);
     console.log("Selected Category ID:", categoryId);
   };
+
   const handleSubmit = async (product: NewProduct) => {
-    const newProductData = {name: product.name,price: product.price, quantity: 1, description: product.description, categories: [{id: selectedCategory}]}
-    const newProduct = await createProductMutation.mutateAsync(newProductData)
-    if (product.images)
-    product.imageUrls.forEach(async image =>  {
-        console.log(image)
+    const newProductData = {
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      description: product.description,
+      categories: [{ id: selectedCategory }]
+    };
+
+    const newProduct = await createProductMutation.mutateAsync(newProductData);
+    if (product.images) {
+      product.imageUrls.forEach(async image => {
+        console.log(image);
         const imageData = {
-            product: {id: newProduct.id},
-            base64Url: image
-        }
-        await createImageMutation.mutateAsync(imageData)
-    });
-    
-  }
+          product: { id: newProduct.id },
+          base64Url: image
+        };
+        await createImageMutation.mutateAsync(imageData);
+      });
+    }
+    return newProduct;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewProduct(prevProduct => ({
@@ -76,18 +88,17 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen })
       quantity: isNaN(quantity) ? 0 : quantity,
     }));
   };
+
   const handleImagesUpload = (images: File[]) => {
-    const imageBase64StringsPromises = images.map(async file => await fileToDataURL(file))
-    
+    const imageBase64StringsPromises = images.map(async file => await fileToDataURL(file));
+
     Promise.all(imageBase64StringsPromises).then(strings => {
-      
       setNewProduct(prevProduct => ({
         ...prevProduct,
         imageUrls: strings,
       }));
     });
   };
-  
 
   const clearForm = () => {
     setNewProduct({
@@ -100,11 +111,13 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen })
     });
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     if (newProduct.name && newProduct.description && newProduct.price > 0 && newProduct.imageUrls && newProduct.imageUrls.length > 0) {
-      handleSubmit(newProduct);
+      const addedProduct = await handleSubmit(newProduct);
+      onAddProduct(addedProduct);
       toast.success('Product added successfully');
       clearForm();
+      handleOpen();
     } else {
       toast.error('Please fill out all fields correctly');
     }
@@ -120,13 +133,13 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen })
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 text-sm font-medium mb-2">Name</label>
           <Input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={newProduct.name}
-                      onChange={handleChange}
-                      placeholder="Enter product name"
-                      className="w-full" crossOrigin={undefined}          />
+            type="text"
+            id="name"
+            name="name"
+            value={newProduct.name}
+            onChange={handleChange}
+            placeholder="Enter product name"
+            className="w-full" crossOrigin={undefined}          />
         </div>
         <div className="mb-4">
           <label htmlFor="description" className="block text-gray-700 text-sm font-medium mb-2">Description</label>
@@ -146,32 +159,32 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ open, handleOpen })
         <div className="mb-4">
           <label htmlFor="price" className="block text-gray-700 text-sm font-medium mb-2">Price</label>
           <Input
-                      type="number"
-                      id="price"
-                      name="price"
-                      value={newProduct.price}
-                      onChange={handlePriceChange}
-                      placeholder="Enter product price"
-                      className="w-full" crossOrigin={undefined}          />
+            type="number"
+            id="price"
+            name="price"
+            value={newProduct.price}
+            onChange={handlePriceChange}
+            placeholder="Enter product price"
+            className="w-full" crossOrigin={undefined}          />
         </div>
         <div className="mb-4">
           <label htmlFor="quantity" className="block text-gray-700 text-sm font-medium mb-2">Quantity</label>
           <Input
-                      type="number"
-                      id="quantity"
-                      name="quantity"
-                      value={newProduct.quantity}
-                      onChange={handleQuantityChange}
-                      placeholder="Enter product quantity"
-                      className="w-full" crossOrigin={undefined}          />
+            type="number"
+            id="quantity"
+            name="quantity"
+            value={newProduct.quantity}
+            onChange={handleQuantityChange}
+            placeholder="Enter product quantity"
+            className="w-full" crossOrigin={undefined}          />
         </div>
         <ImageUploadField onImagesUpload={handleImagesUpload} />
       </DialogBody>
       <DialogFooter>
-        <Button color="blue" onClick={handleAddProduct}>
+        <Button className='flex items-center gap-3 mr-5' color="black" onClick={handleAddProduct}>
           <PlusIcon className="w-5 h-5 mr-2" /> Add Product
         </Button>
-        <Button color="gray" onClick={handleOpen}>Cancel</Button>
+        <Button color="gray" variant='outlined' onClick={handleOpen}>Cancel</Button>
       </DialogFooter>
     </Dialog>
   );

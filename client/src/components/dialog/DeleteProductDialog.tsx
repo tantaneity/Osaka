@@ -11,23 +11,35 @@ interface DeleteProductDialogProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onDeleteProduct: () => void;
+  title?: string;
+  bodyText?: string;
+  cancelText?: string;
+  deleteText?: string;
 }
 
-const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({ open, setOpen, onDeleteProduct }) => {
+const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({
+  open,
+  setOpen,
+  onDeleteProduct,
+  title = "Delete Confirmation",
+  bodyText = "Are you sure you want to delete this product?",
+  cancelText = "Cancel",
+  deleteText = "Delete",
+}) => {
   const handleDeleteProduct = () => {
     onDeleteProduct();
     setOpen(false);
   };
 
   const handleClose = () => {
-    setOpen(false); 
+    setOpen(false);
   };
 
   return (
     <Dialog open={open} handler={setOpen}>
-      <DialogHeader>Delete Confirmation</DialogHeader>
+      <DialogHeader>{title}</DialogHeader>
       <DialogBody>
-        Are you sure you want to delete this product?
+        {bodyText}
       </DialogBody>
       <DialogFooter>
         <Button
@@ -36,10 +48,10 @@ const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({ open, setOpen
           onClick={handleClose}
           className="mr-1"
         >
-          <span>Cancel</span>
+          <span>{cancelText}</span>
         </Button>
         <Button variant="gradient" color="black" onClick={handleDeleteProduct}>
-          <span>Delete</span>
+          <span>{deleteText}</span>
         </Button>
       </DialogFooter>
     </Dialog>

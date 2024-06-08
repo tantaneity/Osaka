@@ -10,6 +10,7 @@ import { useCreateCategory } from '@/hooks/useCategory';
 interface AddCategoryDialogProps {
   open: boolean;
   handleOpen: () => void;
+  onAddCategory: (newCategory: any) => void;
 }
 
 interface NewCategory {
@@ -19,7 +20,7 @@ interface NewCategory {
   parentCategoryId?: string;
 }
 
-const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen }) => {
+const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen, onAddCategory }) => {
   const [newCategory, setNewCategory] = useState<NewCategory>({
     name: '',
     description: '',
@@ -42,9 +43,10 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen 
       name: category.name,
       description: category.description,
       base64Url: category.image,
-      parentCategoryId: {id: category.parentCategoryId}
+      parentCategory: { id: Number(selectedParentCategory) }
     };
-    await createCategoryMutation.mutateAsync(newCategoryData);
+    const addedCategory = await createCategoryMutation.mutateAsync(newCategoryData);
+    return addedCategory;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -75,11 +77,13 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen 
     setSelectedParentCategory('');
   };
 
-  const handleAddCategory = () => {
+  const handleAddCategory = async () => {
     if (newCategory.name && newCategory.description && newCategory.image) {
-      handleSubmit(newCategory);
+      const addedCategory = await handleSubmit(newCategory);
+      onAddCategory(addedCategory);
       toast.success('Category added successfully');
       clearForm();
+      handleOpen();
     } else {
       toast.error('Please fill out all fields correctly');
     }
@@ -95,13 +99,13 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen 
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 text-sm font-medium mb-2">Name</label>
           <Input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={newCategory.name}
-                      onChange={handleChange}
-                      placeholder="Enter category name"
-                      className="w-full" crossOrigin={undefined}          />
+            type="text"
+            id="name"
+            name="name"
+            value={newCategory.name}
+            onChange={handleChange}
+            placeholder="Enter category name"
+            className="w-full" crossOrigin={undefined}          />
         </div>
         <div className="mb-4">
           <label htmlFor="description" className="block text-gray-700 text-sm font-medium mb-2">Description</label>
@@ -121,10 +125,10 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen 
         <ImageUploadField onImagesUpload={handleImageUpload} />
       </DialogBody>
       <DialogFooter>
-        <Button color="blue" onClick={handleAddCategory}>
+        <Button className='flex items-center gap-3 mr-5' color="black" onClick={handleAddCategory}>
           <PlusIcon className="w-5 h-5 mr-2" /> Add Category
         </Button>
-        <Button color="gray" onClick={handleOpen}>Cancel</Button>
+        <Button color="gray" variant='outlined' onClick={handleOpen}>Cancel</Button>
       </DialogFooter>
     </Dialog>
   );

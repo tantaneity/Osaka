@@ -7,5 +7,5 @@ export interface Category {
     }
     base64Url?: string,
     description: string
-    parentCategory?: Category | {id: string}
+    parentCategory?: Category | {id: number}
 }
