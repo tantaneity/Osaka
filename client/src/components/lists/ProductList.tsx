@@ -1,4 +1,4 @@
-import { useGetProducts, useSearchProducts } from '@/hooks/useProducts';
+import { useSearchProducts } from '@/hooks/useProducts';
 import ProductCard from '../card/ProductCard';
 import { CardPlacehoderSkeleton } from '../skeleton/CardSkeleton';
 

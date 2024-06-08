@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Accordion, ListItem, AccordionHeader, AccordionBody, ListItemPrefix, Chip, List, ListItemSuffix, Typography } from "@material-tailwind/react";
-import { PresentationChartBarIcon, ShoppingBagIcon, InboxIcon, PowerIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { PresentationChartBarIcon, ShoppingBagIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 interface MenuItemProps {
   searchTerm: string;
@@ -22,10 +22,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ searchTerm }) => {
     {
       title: "E-Commerce",
       icon: <ShoppingBagIcon className="h-5 w-5" />,
-      children: ["Orders", "Products", "Category", "News"],
+      children: ["Products", "Category"],
     },
-    { title: "Inbox", icon: <InboxIcon className="h-5 w-5" />, children: [] },
-    { title: "Log Out", icon: <PowerIcon className="h-5 w-5" />, children: [] },
   ];
 
   const filteredMenuItems = menuItems.filter((item) => {
