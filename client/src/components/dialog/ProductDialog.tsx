@@ -25,7 +25,7 @@ const ProductDialog: React.FC<ProductDialogProps> = ({ open, handleOpen, product
   return (
     <Dialog size="xxl" open={open} handler={handleOpen} className="bg-transparent shadow-none backdrop-blur-sm">
       <Toaster/>
-      <DialogBody className="overflow-scroll">
+      <DialogBody className="overflow-y-scroll no-scrollbar">
         <Card className="max-w-xl mx-auto">
           <IconButton className='h-6 w-6 p-5 m-2' size="sm" variant='text' onClick={handleOpen}>
             <XMarkIcon className='h-6 w-6' />

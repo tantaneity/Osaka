@@ -1,8 +1,9 @@
 import AnalyticsDashboardLayout from '@/components/layout/dashboard/analytics/AnalyticsLayout';
+import ProductDashboardLayout from '@/components/layout/dashboard/products/ProductLayout';
 import SidebarNav from '@/components/nav/SidebarNav/SidebarNav';
 import useUserStore from '@/store/UserStore';
 import { Spinner } from '@material-tailwind/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router';
 
 
@@ -15,9 +16,10 @@ const DashboardPage: React.FC = () => {
     }
     const renderLayout = () => {
         switch (navigate) {
-            case 'dashboard':
+            case 'analytics':
                 return <AnalyticsDashboardLayout />
-        
+            case 'products':
+                return <ProductDashboardLayout />
             default:
                 return <AnalyticsDashboardLayout />
 

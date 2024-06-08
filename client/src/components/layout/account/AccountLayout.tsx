@@ -7,7 +7,7 @@ interface AccountLayoutProps {
 
 const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
   return (
-    <Card className='flex-1 p-2 sm:p-4'>
+    <Card className='flex-1 p-2 sm:p-4 min-h-screen'>
       {children}
     </Card>
   );

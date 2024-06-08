@@ -7,7 +7,7 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
-    <Card className='h-screen mx-auto grid text-center px-8'>
+    <Card className='min-h-screen mx-auto grid text-center px-8'>
       {children}
     </Card>
   );

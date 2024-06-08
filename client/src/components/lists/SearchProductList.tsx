@@ -3,7 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Product } from "@/types/products/Product";
 import { useSearchProducts } from "@/hooks/useProducts";
 import ProductCard from "../card/ProductCard";
-import { Spinner } from "@material-tailwind/react";
+import { Card, Spinner } from "@material-tailwind/react";
 
 type SearchProductListProps = {
   query: string;
@@ -49,19 +49,22 @@ const SearchProductList = ({ query }: SearchProductListProps) => {
   }, [query]);
 
   return (
-    <InfiniteScroll
-      dataLength={products.length}
-      next={loadMoreProducts}
-      hasMore={hasMore}
-      loader={<Spinner />}
-      endMessage={<p>No more products</p>}
-    >
-      <div className="relative flex flex-wrap justify-center">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </InfiniteScroll>
+    <Card>
+      <InfiniteScroll
+            dataLength={products.length}
+            next={loadMoreProducts}
+            hasMore={hasMore}
+            className="overflow-y-scroll no-scrollbar"
+            loader={<div className="flex justify-center items-center h-96"><Spinner /></div>}
+          >
+            <div className="mt-5 mb-5 p-5 relative flex flex-wrap justify-center">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+        </InfiniteScroll>
+    </Card>
+    
   );
 };
 

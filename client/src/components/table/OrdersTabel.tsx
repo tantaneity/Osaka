@@ -16,7 +16,7 @@ export function OrderTable() {
   }
 
   return (
-    <Card className="h-full w-full overflow-scroll p-2 md:p-5">
+    <Card className="h-full w-full overflow-y-scroll no-scrollbar p-2 md:p-5">
       <div className="w-full overflow-x-auto">
         <table className="w-full min-w-max table-auto text-left">
           <thead>

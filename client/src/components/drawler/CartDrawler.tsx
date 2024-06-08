@@ -22,7 +22,7 @@ const CartDrawler: React.FC<CartDrawlerProps> = ({ open, onClose }) => {
         <Drawer 
             open={open} 
             onClose={onClose} 
-            className="p-4 drop-shadow-2xl flex flex-col justify-between rounded-lg"
+            className="p-4 drop-shadow-2xl flex flex-col justify-between rounded-lg overflow-y-scroll no-scrollbar"
             placement="left"
             size={500}
             overlay={false}

@@ -8,7 +8,7 @@ import useCartStore from '@/store/CartStore';
 import { useGetProductById } from '@/hooks/useProducts';
 
 const CartList: React.FC = () => {
-    const { cart, addItem, removeItem, decreaseItem, loadCart } = useCartStore();
+    const { cart, addItem, removeItem, decreaseItem } = useCartStore();
     
     const handleIncrease = (productId: string) => {
         addItem({ id: productId }, 1);
@@ -67,7 +67,7 @@ const CartItemDetail: React.FC<CartItemDetailProps> = ({ cartItem, handleDecreas
                             <Avatar 
                                 variant='rounded'
                                 alt={productData.name}
-                                src={convertToBase64(productData.images[0]?.data.data)}
+                                src={ productData.images[0].data?.data ? convertToBase64(productData.images[0].data.data) : productData.images[0].base64Url && productData.images[0].base64Url ? productData.images[0].base64Url : 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg'}
                                 className="w-24 h-24 object-cover"
                             />
                         </a>

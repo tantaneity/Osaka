@@ -9,6 +9,7 @@ export class ImageMapper {
             id: entity.id,
             product: {id: entity.product.id},
             data: entity.data,
+            base64Url: entity.base64Url,
             createdAt: entity.createdAt
         }
     }

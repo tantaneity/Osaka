@@ -4,6 +4,6 @@ export interface ProductCreate {
     name: string
     description: string
     price: number
-    categories?: Category[]
+    categories?: Category[] | ({id: string})[]
     quantity: number
 }
