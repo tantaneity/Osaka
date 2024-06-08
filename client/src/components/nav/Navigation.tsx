@@ -19,7 +19,7 @@ import {
   ChevronDownIcon,
   Bars2Icon,
   HeartIcon,
-  NewspaperIcon,
+  // NewspaperIcon,
   UserIcon
 } from "@heroicons/react/24/solid";
 import useUserStore from "@/store/UserStore";
@@ -122,11 +122,11 @@ const navListItems = [
     icon: HeartIcon,
     href: '/wishlist'
   },
-  {
-    label: "News",
-    icon: NewspaperIcon,
-    href: '/news'
-  },
+  // {
+  //   label: "News",
+  //   icon: NewspaperIcon,
+  //   href: '/news'
+  // },
 ];
 
 function NavList() {
