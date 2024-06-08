@@ -10,13 +10,7 @@ interface WishlistCardProps {
 
 export const WishlistCard: React.FC<WishlistCardProps> = ({ item, onRemove }) => {
     const { data: product } = useGetProductById(item.productId);
-    let imageUrl;
-    if (product && product.images && product.images[0] && product.images[0].data && product.images[0].data.data) {
-        const image = product.images[0].data.data;
-        imageUrl = convertToBase64(image);
-    } else {
-        imageUrl = "";
-    }
+    const imageUrl = product?.images[0].data?.data ? convertToBase64(product?.images[0].data.data) : product?.images[0].base64Url && product?.images[0].base64Url ? product?.images[0].base64Url : 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg'
     
     
     return (

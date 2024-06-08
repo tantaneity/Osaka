@@ -17,6 +17,7 @@ import PageRouter from './src/routes/PageRouter'
 import HomePageBannerRouter from './src/routes/HomePageBannerRouter'
 import NewsRouter from './src/routes/NewsRouter'
 import WishlistItemRouter from './src/routes/WishlistItemRouter'
+import ImageRouter from './src/routes/ImageRouter'
 const app = express()
 const PORT = process.env.PORT || 5000
 
@@ -29,6 +30,7 @@ app.use(cors({
 app.use('/api/users', UserRouter)
 app.use('/api/admins', AdminRouter)
 app.use('/api/drinks', ProductRouter)
+app.use('/api/images', ImageRouter)
 app.use('/api/category', CategoryRouter)
 app.use('/api/sells', SellsRouter)
 app.use('/api/reviews', ReviewRouter)

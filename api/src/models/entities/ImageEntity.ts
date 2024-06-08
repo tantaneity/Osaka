@@ -11,8 +11,11 @@ export class ImageEntity {
     @ManyToOne(() => ProductEntity, product => product.images)
     product: ProductEntity
 
-    @Column({ type: 'bytea' })
+    @Column({ type: 'bytea', nullable: true })
     data: Buffer
+
+    @Column({ type: 'text', nullable: true })
+    base64Url: string
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date

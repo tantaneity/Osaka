@@ -7,7 +7,7 @@ function ProductList() {
     
     if (isLoading) return <div><CardPlacehoderSkeleton/></div>;
     if (isError) return <div>Error fetching data</div>;
-  
+    console.log(data)
     return (
         <div className='relative flex flex-wrap justify-center'>
           {data && data.map(product => (

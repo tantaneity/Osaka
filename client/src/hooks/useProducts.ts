@@ -13,11 +13,11 @@ export const useGetProductById = (productId: string | undefined | null) => useQu
     queryFn: () => ProductService.getProductById(productId || ''),
     enabled: !!productId,
 })
-export const useCreateProduct = (inputProduct: ProductCreate) => {
+export const useCreateProduct = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['create-product'],
-        mutationFn: () => ProductService.createProduct(inputProduct),
+        mutationFn: (inputProduct: ProductCreate) => ProductService.createProduct(inputProduct),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["products"]});
         }

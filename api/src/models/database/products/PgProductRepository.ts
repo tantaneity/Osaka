@@ -103,8 +103,7 @@ export class PgProductRepository implements IProductRepository {
     
         query.where = whereClause;
     
-        // Add ORDER BY clause
-        query.order = { name: 'ASC' }; // Order by product name ascending, you can adjust this as needed
+        query.order = { name: 'ASC' };
     
         const products = await this.productRepository.find({
             ...query,

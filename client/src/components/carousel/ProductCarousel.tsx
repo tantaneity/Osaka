@@ -9,6 +9,7 @@ interface ProductCarouselProps {
 }
 
 const ProductCarousel: React.FC<ProductCarouselProps> = ({ images }) => {
+  
   return (
     <Carousel className='rounded-xl h-full w-full' autoplay={true} loop={true}
       prevArrow={({ handlePrev }) => (
@@ -23,10 +24,10 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ images }) => {
       )}
     >
       {images.map((imageData, index) => {
-        const imageCUrl = convertToBase64(imageData.data.data);
+        const imageUrl = imageData.data?.data ? convertToBase64(imageData.data.data) : imageData.base64Url;
         return (
           <div key={index} className="flex justify-center items-center h-full w-full">
-            <img src={imageCUrl} alt={`Product image ${index + 1}`} className="max-w-full max-h-full object-contain rounded" />
+            <img src={imageUrl} alt={`Product image ${index + 1}`} className="max-w-full max-h-full object-contain rounded" />
           </div>
         );
       })}

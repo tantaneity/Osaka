@@ -3,19 +3,20 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Product } from "@/types/products/Product";
 import { useSearchProducts } from "@/hooks/useProducts";
 import ProductCard from "../card/ProductCard";
-import { Spinner } from "@material-tailwind/react";
+import { Card, Spinner } from "@material-tailwind/react";
 
 type SearchProductListProps = {
   query: string;
+  category?: string;
 };
 
-const SearchProductList = ({ query }: SearchProductListProps) => {
+const SearchProductList = ({ query, category }: SearchProductListProps) => {
   const [offset, setOffset] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const { data: newProducts } = useSearchProducts({ name: query, limit: 10, offset });
+  const { data: newProducts } = useSearchProducts({ name: query, categoryName:category, limit: 10, offset });
 
   useEffect(() => {
     if (newProducts && loading) {
@@ -46,22 +47,25 @@ const SearchProductList = ({ query }: SearchProductListProps) => {
     setOffset(0);
     setHasMore(true);
     setLoading(true);
-  }, [query]);
+  }, [query, category]);
 
   return (
-    <InfiniteScroll
-      dataLength={products.length}
-      next={loadMoreProducts}
-      hasMore={hasMore}
-      loader={<Spinner />}
-      endMessage={<p>No more products</p>}
-    >
-      <div className="relative flex flex-wrap justify-center">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </InfiniteScroll>
+    <Card>
+      <InfiniteScroll
+            dataLength={products.length}
+            next={loadMoreProducts}
+            hasMore={hasMore}
+            className="overflow-y-scroll no-scrollbar"
+            loader={<div className="flex justify-center items-center h-96"><Spinner /></div>}
+          >
+            <div className="mt-5 mb-5 p-5 relative flex flex-wrap justify-center">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+        </InfiniteScroll>
+    </Card>
+    
   );
 };
 

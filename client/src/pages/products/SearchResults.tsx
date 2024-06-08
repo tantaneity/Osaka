@@ -7,6 +7,8 @@ import { useLocation } from 'react-router-dom';
 const SearchResults = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search).get('name') || '';
+    let category = new URLSearchParams(location.search).get('category') || '';
+    category = category.replace(/-/g, ' ');
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const handleCartButtonClick = () => {
@@ -20,7 +22,7 @@ const SearchResults = () => {
     <div className="relative container mx-auto p-4">
         <CartDrawler open={drawerOpen} onClose={closeDrawer} />
       <h1 className="text-2xl font-bold mb-4">Search Results for "{query}"</h1>
-      <SearchProductList query={query} />
+      <SearchProductList query={query} category={category} /> 
       <CartButton onClick={handleCartButtonClick} />
     </div>
   );

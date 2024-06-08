@@ -1,10 +1,11 @@
 export interface Category {
     id: number
     name: string
-    image: {
+    image?: {
         type: string
         data: ArrayBuffer
     }
+    base64Url?: string,
     description: string
-    parentCategory?: Category
+    parentCategory?: Category | {id: string}
 }
