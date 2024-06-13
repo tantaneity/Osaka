@@ -36,7 +36,7 @@ function DashboardProductList() {
     <div className='relative flex flex-wrap justify-center'>
       <AddProductCard onClick={handleOpenDialog} />
       {products.map((product: Product) => (
-        <div key={product.name} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 flex justify-center">
+        <div key={product.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 flex justify-center">
           <ProductCard product={product} />
         </div>
       ))}

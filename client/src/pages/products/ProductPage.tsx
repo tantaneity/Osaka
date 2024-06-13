@@ -158,10 +158,14 @@ const ProductPage: React.FC = () => {
                         )}
                     >
                         {productData?.images.map((imageData, index) => {
-                            const imageCUrl = convertToBase64(imageData.data.data);
+                             const imageUrl =
+                             imageData && imageData.data?.data
+                               ? convertToBase64(imageData.data.data)
+                               : (imageData?.base64Url || 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg');
+
                             return (
                                 <div key={index} className="flex justify-center items-center h-full w-full">
-                                    <img src={imageCUrl} alt={`Product image ${index + 1}`} className="max-w-full max-h-full object-contain rounded" />
+                                    <img src={imageUrl} alt={`Product image ${index + 1}`} className="max-w-full max-h-full object-contain rounded" />
                                 </div>
                             );
                         })}
