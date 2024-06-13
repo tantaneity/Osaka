@@ -11,7 +11,7 @@ function ProductList() {
     return (
         <div className='relative flex flex-wrap justify-center'>
           {data && data.map(product => (
-            <div key={product.name} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 flex justify-center">
+            <div key={product.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 flex justify-center">
               <ProductCard product={product} />
             </div>
           ))}

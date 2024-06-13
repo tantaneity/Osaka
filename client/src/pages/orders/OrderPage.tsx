@@ -32,7 +32,9 @@ const OrderListItem: React.FC<{ item: OrderItem }> = ({ item }) => {
             variant="rounded"
             className='w-24 h-24 object-cover'
             alt="item"
-            src={convertToBase64(product.images[0].data.data)}
+            src={ product.images[0] && product.images[0].data?.data
+              ? convertToBase64(product.images[0].data.data)
+              : (product.images[0]?.base64Url || 'https://i.pinimg.com/736x/8d/62/26/8d6226d7ea86222727a6f09519a0042d.jpg')}
           />
         </ListItemPrefix>
         <div className="flex flex-col sm:flex-row sm:items-center sm:ml-4">

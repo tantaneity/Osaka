@@ -17,7 +17,7 @@ interface NewCategory {
   name: string;
   description: string;
   image: string;
-  parentCategoryId?: string;
+  parentCategoryId?: string | null;
 }
 
 const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen, onAddCategory }) => {
@@ -25,7 +25,7 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen,
     name: '',
     description: '',
     image: '',
-    parentCategoryId: undefined
+    parentCategoryId: null
   });
   const [selectedParentCategory, setSelectedParentCategory] = useState<string>('');
   const createCategoryMutation = useCreateCategory();
@@ -72,7 +72,7 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({ open, handleOpen,
       name: '',
       description: '',
       image: '',
-      parentCategoryId: undefined
+      parentCategoryId: null
     });
     setSelectedParentCategory('');
   };
